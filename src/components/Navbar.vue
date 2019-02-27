@@ -2,15 +2,15 @@
   <div id="navbar">
     <div id="navbar-spacer"></div>
 
-    <div 
-      v-for="(button,index) in this.buttons" 
-      v-bind:key="index" 
-      v-bind:class="{selected: button.selected}"
-      class="navbar-button" 
-      v-on:click="reroute(button)">
-        {{button.name}}
+    <div
+      v-for="(button, index) in this.buttons"
+      v-bind:key="index"
+      v-bind:class="{ selected: button.selected }"
+      class="navbar-button"
+      v-on:click="reroute(button)"
+    >
+      {{ button.name }}
     </div>
-
   </div>
 </template>
 
@@ -20,8 +20,7 @@ export default {
   props: {},
   methods: {
     reroute(button) {
-
-      for(let b of this.buttons) b.selected = false;
+      for (let b of this.buttons) b.selected = false;
       button.selected = true;
 
       this.$router.push(button.route);
@@ -29,16 +28,15 @@ export default {
   },
 
   data() {
-    return({
+    return {
       buttons: [
-        {name: "Übersicht", route: "/", selected: true},
-        {name: "Verträge", route: "/contracts", selected: false},
-        {name: "Zählerstände", route: "/meters", selected: false},
-        {name: "Statistiken", route: "/statistics", selected: false},
+        { name: "Übersicht", route: "/", selected: true },
+        { name: "Verträge", route: "/contracts", selected: false },
+        { name: "Zählerstände", route: "/meters", selected: false },
+        { name: "Statistiken", route: "/statistics", selected: false }
       ]
-    })
+    };
   }
-
 };
 </script>
 
@@ -60,12 +58,11 @@ export default {
   text-align: center;
   height: 3%;
   padding: 8%;
-  
 
   border-style: none none solid none;
   border-width: thin;
 
-  transition: background-color .4s ease-in-out;
+  transition: background-color 0.4s ease-in-out;
   cursor: pointer;
 
   display: grid;
@@ -78,6 +75,6 @@ export default {
 }
 
 .selected {
-  background-color: var(--c2high) !important; 
+  background-color: var(--c2high) !important;
 }
 </style>

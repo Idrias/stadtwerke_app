@@ -1,8 +1,7 @@
 <template>
-  
   <div id="app">
     <Handle title="Stadtwerke Verwaltungsapp"></Handle>
-    
+
     <div id="main">
       <Navbar></Navbar>
       <div id="content">
@@ -10,7 +9,6 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -21,7 +19,7 @@ export default {
   name: "app",
   components: {
     Handle,
-    Navbar,
+    Navbar
   }
 };
 </script>
@@ -39,8 +37,8 @@ export default {
   --c3: #36393e;
   --c4: #424549;
 
-  --c2high: #DDEAEA;
-  --c2hover: #A8BAE2;
+  --c2high: #ddeaea;
+  --c2hover: #a8bae2;
 
   --ct0: #2c3e50;
   --ct1: lightgray;
@@ -77,23 +75,20 @@ export default {
 }
 
 /*https://codepen.io/devstreak/pen/dMYgeO*/
-::-webkit-scrollbar-track
-{
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	border-radius: 10px;
-	background-color: var(--c3);
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  background-color: var(--c3);
 }
 
-::-webkit-scrollbar
-{
-	width: 12px;
-	background-color: var(--c3);
+::-webkit-scrollbar {
+  width: 12px;
+  background-color: var(--c3);
 }
 
-::-webkit-scrollbar-thumb
-{
-	border-radius: 10px;
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-	background-color: #555;
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #555;
 }
 </style>
