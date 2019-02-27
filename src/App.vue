@@ -28,19 +28,22 @@ export default {
 
 <style>
 :root {
-  --c0: black;
-  --c1: #2B3A42;
-  --c2: #BDD4DE;
+  --c0: #1e2124;
+  --c1: #282b30;
+  --c2: #7289da;
   /*
   --c2high: rgb(146, 208, 80);
   --c2hover: rgb(168,210,151);
   */
 
-  --c3: #3F5765;
-  --c4: #FCFFF5;
+  --c3: #36393e;
+  --c4: #424549;
 
-  --c2high: var(--c4);
-  --c2hover: #DDEAEA;
+  --c2high: #DDEAEA;
+  --c2hover: #A8BAE2;
+
+  --ct0: #2c3e50;
+  --ct1: lightgray;
 }
 
 * {
@@ -58,7 +61,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: var(--ct0);
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -67,5 +70,30 @@ export default {
 
 #main {
   flex: 1;
+}
+
+.shadow {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+/*https://codepen.io/devstreak/pen/dMYgeO*/
+::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: var(--c3);
+}
+
+::-webkit-scrollbar
+{
+	width: 12px;
+	background-color: var(--c3);
+}
+
+::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #555;
 }
 </style>

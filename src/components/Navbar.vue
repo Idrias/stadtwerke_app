@@ -60,7 +60,7 @@ export default {
   text-align: center;
   height: 3%;
   padding: 8%;
-
+  
 
   border-style: none none solid none;
   border-width: thin;
