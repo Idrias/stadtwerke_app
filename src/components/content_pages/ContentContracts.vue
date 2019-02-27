@@ -57,7 +57,7 @@ export default {
 #content {
   height: 95%;
   width: 100%;
-  background-color: lightyellow;
+  background-color: var(--c4);
 }
 
 /*
@@ -66,10 +66,8 @@ export default {
 #wasserbutton {background-color: lightblue;}
 #abwasserbutton {background-color: burlywood;}
 */
-#strombutton {background-color: rgb(155, 236, 68);}
-#gasbutton {background-color: #70ad47;}
-#wasserbutton {background-color: #70ad47;}
-#abwasserbutton {background-color: #70ad47; border-right: 0px}
+
+#abwasserbutton {border-right: 0px}
 
 .shadow {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -81,11 +79,12 @@ export default {
   border-right: 1px solid;
   display: grid;
   align-content: center;
+  background-color: var(--c2);
   transition: background-color .4s ease-in-out;
 }
 
 .button:hover {
-  background-color: rgb(146, 208, 80) !important;
+  background-color: var(--c2high) !important;
   cursor: pointer;
 }
 

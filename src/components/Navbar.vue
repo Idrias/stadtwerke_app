@@ -44,7 +44,7 @@ export default {
 
 <style scoped>
 #navbar {
-  background-color: #16324f;
+  background-color: var(--c1);
   min-height: 100%;
   height: 100%;
   width: 15%;
@@ -56,7 +56,7 @@ export default {
 }
 
 .navbar-button {
-  background-color: #70ad47;
+  background-color: var(--c2);
   text-align: center;
   height: 3%;
   padding: 8%;
@@ -73,11 +73,11 @@ export default {
 }
 
 .navbar-button:hover {
-  background-color: rgb(146, 208, 80);
+  background-color: var(--c2hover);
   cursor: pointer;
 }
 
 .selected {
-  background-color: rgb(155, 236, 68) !important; 
+  background-color: var(--c2high) !important; 
 }
 </style>

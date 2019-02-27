@@ -27,12 +27,28 @@ export default {
 </script>
 
 <style>
+:root {
+  --c0: black;
+  --c1: #2B3A42;
+  --c2: #BDD4DE;
+  /*
+  --c2high: rgb(146, 208, 80);
+  --c2hover: rgb(168,210,151);
+  */
+
+  --c3: #3F5765;
+  --c4: #FCFFF5;
+
+  --c2high: var(--c4);
+  --c2hover: #DDEAEA;
+}
+
 * {
   margin: 0;
   padding: 0;
 }
 #content {
-  background-color: rgb(217, 217, 217); /*#18435A*/ /*lightgray*/
+  background-color: var(--c3); /*#18435A*/ /*lightgray*/
   width: 85%;
   height: 100%;
   float: left;
@@ -46,7 +62,7 @@ export default {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #2a628f;
+  background-color: var(--c0);
 }
 
 #main {

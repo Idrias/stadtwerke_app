@@ -19,7 +19,7 @@ export default {
   margin: 2px 2px 0 2px;
   height: 30px;
   line-height: 30px;
-  background: #2a628f;
+  background: var(--c0);
   font-size: 15px;
   color: lightgray;
   -webkit-app-region: drag;
