@@ -1,7 +1,8 @@
 <template>
   <div id="AddContract" v-if="show" v-on:click="close()">
     <div id="contractCreationWindow" class="shadow" v-on:click.stop>
-      <h2>Neuer Vertrag</h2>
+      <h2 v-if="changeMode">Vertrag bearbeiten</h2>
+      <h2 v-else>Neuer Vertrag</h2>
       <form v-on:submit.prevent>
         Vertragsart <br />
 
@@ -9,39 +10,39 @@
           <tr>
             <td class="radiotd">
               <input
-                type="radio"
+                type="radio" class="radio"
                 name="kind"
-                v-model.number="inputKind"
+                v-model.number="input.category"
                 value="0"
                 checked
-              />
+              /><br />
               Strom
             </td>
             <td class="radiotd">
               <input
-                type="radio"
+                type="radio" class="radio"
                 name="kind"
-                v-model.number="inputKind"
+                v-model.number="input.category"
                 value="1"
-              />
+              /><br />
               Gas
             </td>
             <td class="radiotd">
               <input
-                type="radio"
+                type="radio" class="radio"
                 name="kind"
-                v-model.number="inputKind"
+                v-model.number="input.category"
                 value="2"
-              />
+              /><br />
               Wasser
             </td>
             <td class="radiotd">
               <input
-                type="radio"
+                type="radio" class="radio"
                 name="kind"
-                v-model.number="inputKind"
+                v-model.number="input.category"
                 value="3"
-              />
+              /><br />
               Abwasser
             </td>
           </tr>
@@ -53,89 +54,135 @@
           <tr>
             <td>Vertragspartner</td>
             <td>
-              <input class="textinput" type="text" v-model="inputCompany" />
+              <input class="textinput" type="text" v-model="input.company" />
             </td>
           </tr>
 
           <tr>
             <td>Vertragsnummer</td>
-            <td><input class="textinput" type="text" v-model="inputCid" /></td>
+            <td><input class="textinput" type="text" v-model="input.cid" /></td>
           </tr>
 
           <tr>
             <td>Start</td>
             <td>
-              <input class="textinput" type="date" v-model="inputStart" />
+              <input class="textinput" type="date" v-model="input.start" />
             </td>
           </tr>
 
           <tr>
             <td>Ende</td>
-            <td><input class="textinput" type="date" v-model="inputEnd" /></td>
+            <td><input class="textinput" type="date" v-model="input.end" /></td>
           </tr>
 
           <tr>
-            <td>Fixkosten</td>
+            <td>Fixkosten<br>(€/Jahr)</td>
             <td>
-              <input class="textinput" type="text" v-model="inputCostfix" />
+              <input class="textinput" type="text" v-model="input.costfix" />
             </td>
           </tr>
 
-          <tr>
-            <td>Variable Kosten</td>
+
+          <tr v-if="input.category == 3">
+            <td>Kosten Abwasser<br>(€/{{getMeasurementUnit()}})</td>
             <td>
-              <input
-                class="textinput"
-                type="text"
-                v-model="inputCostvariable"
-              />
+              <input class="textinput" type="text" v-model="input.costvardirty" />
+            </td>
+          </tr>
+          <tr v-if="input.category == 3">
+            <td>Kosten Niederschlag<br>(€/m²)</td>
+            <td>
+              <input class="textinput" type="text" v-model="input.costvarrain" />
+            </td>
+          </tr>
+
+          <tr v-else>
+            <td>Variable Kosten<br>(€/{{getMeasurementUnit()}})</td>
+            <td>
+              <input class="textinput" type="text" v-model="input.costvar" />
             </td>
           </tr>
         </table>
 
         <br />
-        <button class="shadow" v-on:click="close()">Verwerfen</button>
-        <button
-          class="shadow"
-          v-on:click="$emit('inputDone', getNewContract())"
-        >
-          Hinzufügen
-        </button>
+        <div id="buttonBar">
+          <button class="shadow" v-if="changeMode" v-on:click="closeAndDelete()">
+            Vertrag löschen
+          </button>
+          <button class="shadow" v-on:click="close()">Abbrechen</button>
+          <button class="shadow" v-on:click="closeAndUpdate()">Speichern</button>
+
+        </div>
       </form>
     </div>
   </div>
 </template>
 
 <script>
+const uuidv1 = require("uuid/v1");
+
 export default {
   name: "AddContract",
   props: {},
   data() {
     return {
       show: false,
-      inputKind: 0
+      changeMode: false,
+
+      input: {
+        company: null,
+        cid: null,
+        start: null,
+        end: null,
+        costfix: null,
+        costvar: null,
+        costvarrain: null,
+        costvardirty: null,
+        category: null,
+        uuid: null
+      },
+      ...this.$root.$data.sharedState,
     };
   },
   methods: {
     close() {
       this.show = false;
     },
-    open(defaultRadio) {
-      console.log(defaultRadio);
-      this.inputKind = defaultRadio;
+    closeAndUpdate() {
+      this.close();
+      this.$emit("inputDone", { ...this.input });
+    },
+    closeAndDelete() {
+      this.close();
+      this.$emit("deleteRequest", this.input.uuid);
+    },
+
+    openNewContract(defaultRadio) {
+      this.changeMode = false;
+
+      for (let key in this.input) {
+        this.input[key] = null;
+      }
+
+      this.input.category = defaultRadio;
+      this.input.uuid = uuidv1();
       this.show = true;
     },
-    getNewContract() {
-      return {
-        company: this.inputCompany,
-        cid: this.inputCid,
-        start: this.inputStart,
-        end: this.inputEnd,
-        costfix: this.inputCostfix,
-        costvar: this.inputCostvariable,
-        category: this.inputKind
-      };
-    }
+
+    openForChange(currentVersion) {
+      this.changeMode = true;
+      Object.assign(this.input, currentVersion);
+      this.show = true;
+    },
+
+    getMeasurementUnit() {
+      for(let category of this.categories) {
+        if(category.id == this.input.category) {
+          return category.unit;
+        }
+      }
+    },
+
   }
 };
 </script>
@@ -143,13 +190,14 @@ export default {
 <style scoped>
 #contractCreationWindow {
   width: 50%;
-  height: 70%;
+  
+  max-height: 80%;
   background-color: var(--c3);
   color: var(--ct1);
   padding: 30px;
   box-sizing: border-box;
   margin-left: 32.5%;
-  margin-top: 7.5%;
+  margin-top: 5%;
   overflow-y: auto;
 }
 
@@ -180,7 +228,6 @@ button {
   width: 30%;
   height: 30px;
   margin: 8px;
-  margin-top: 20px;
 }
 
 button:hover {
@@ -200,10 +247,15 @@ form {
 .textinput {
   height: 25px;
   width: 100%;
+  color: var(--c2);
 }
 
 .radiotd {
   width: 70px;
   max-width: 70px;
+}
+
+#buttonBar {
+  margin-top: 20px;
 }
 </style>

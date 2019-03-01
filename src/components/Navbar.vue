@@ -15,6 +15,7 @@
 </template>
 
 <script>
+
 export default {
   name: "Navbar",
   props: {},
@@ -57,7 +58,7 @@ export default {
   background-color: var(--c2);
   text-align: center;
   height: 3%;
-  padding: 8%;
+  padding: 12%;
 
   border-style: none none solid none;
   border-width: thin;

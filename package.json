@@ -12,6 +12,7 @@
     "postuninstall": "electron-builder install-app-deps"
   },
   "dependencies": {
+    "uuid": "^3.3.2",
     "vue": "^2.5.22",
     "vue-router": "^3.0.2"
   },

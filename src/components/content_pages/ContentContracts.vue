@@ -1,19 +1,15 @@
 <template>
-  <div id="contracts">
-    <div class="shadow" id="buttonbar">
-      <div
-        v-for="cat in this.categories"
-        v-bind:key="cat.id"
-        v-on:click="buttonClick(cat.id)"
-        v-bind:class="{ selected: cat.selected }"
-        class="button"
-        v-bind:id="cat.name"
-      >
-        {{ cat.name }}
-      </div>
-    </div>
 
-    <div class="shadow" id="content">
+  <ContentWrapper id="contracts">
+    
+    <template #outer>
+      <ButtonBar 
+        v-bind:selectedCategory="selectedCategory" 
+        v-on:categorySelected="handleCategorySelected">
+      </ButtonBar>
+    </template>
+
+    <template #inner>
       <table v-if="getContracts().length > 0">
         <tr>
           <th>Vertragspartner</th>
@@ -26,7 +22,11 @@
           <th v-if="selectedCategory.id == 3">Kosten Niederschlag</th>
         </tr>
 
-        <tr v-for="contract in getContracts()" v-bind:key="contract">
+        <tr
+          v-for="contract in getContracts()"
+          v-bind:key="contract.uuid"
+          v-on:click="updateContract(contract)"
+        >
           <td>{{ contract.company }}</td>
           <td>{{ contract.cid }}</td>
           <td>{{ contract.start }}</td>
@@ -47,96 +47,40 @@
       <p v-else>Noch keine Verträge hinzugefügt.</p>
 
       <div id="btn_addContract" v-on:click="addContract()">+</div>
-    </div>
+    </template>
 
-    <AddContract v-on:inputDone="handleNewContract" ref="addContract" />
-  </div>
+    <AddContract
+      v-on:inputDone="handleNewContract"
+      v-on:deleteRequest="handleDeleteRequest"
+      ref="addContract"
+    />
+
+  </ContentWrapper>
+
 </template>
 
 <script>
+const uuidv1 = require("uuid/v1");
 import AddContract from "../dialogues/AddContract.vue";
-
-let categories = [
-  { id: 0, name: "Strom", selected: true, unit: "kWh" },
-  { id: 1, name: "Gas", selected: false, unit: "kWh" },
-  { id: 2, name: "Wasser", selected: false, unit: "m³" },
-  { id: 3, name: "Abwasser", selected: false, unit: "m³" }
-];
-
-let contracts = [
-  {
-    company: "Stadtwerke AG",
-    cid: "1245123",
-    costfix: 12,
-    costvar: 12.3,
-    category: 0,
-    start: "01.01.2000",
-    end: "31.12.9999"
-  },
-  {
-    company: "Stadtwerke SE",
-    cid: "1245124",
-    costfix: 12,
-    costvar: 12.3,
-    category: 0,
-    start: "2000",
-    end: "9999"
-  },
-  {
-    company: "Stadtwerke GmbH",
-    cid: "1245125",
-    costfix: 12,
-    costvar: 12.3,
-    category: 1,
-    start: "2000",
-    end: "9999"
-  },
-  {
-    company: "Stadtwerke GmbH",
-    cid: "1245125",
-    costfix: 12,
-    costvar: 12.3,
-    category: 3,
-    start: "2000",
-    end: "9999"
-  },
-  {
-    company: "Stadtwerke GmbH",
-    cid: "1245125",
-    costfix: 12,
-    costvardirty: 12.3,
-    costvarrain: 1.23,
-    category: 3,
-    start: "2000",
-    end: "9999"
-  }
-];
+import ButtonBar from "../elements/ButtonBar.vue";
+import ContentWrapper from "./ContentWrapper.vue";
 
 export default {
   name: "ContentContracts",
   props: {},
-  components: { AddContract },
+  components: { AddContract, ButtonBar, ContentWrapper },
   data() {
-    return {
-      categories: categories,
-      contracts: contracts,
-      selectedCategory: categories[0]
+    let el = {
+      ...this.$root.$data.sharedState,
     };
+    el.selectedCategory = el.categories[0];
+    return el;
   },
   methods: {
-    buttonClick(id) {
-      for (let cat of this.categories) {
-        if (cat.id == id) {
-          cat.selected = true;
-          this.selectedCategory = cat;
-        } else cat.selected = false;
-      }
-    },
-
     getContracts() {
       let returns = [];
       for (let cat of this.categories) {
-        if (cat.selected) {
+        if (cat === this.selectedCategory) {
           for (let contract of this.contracts) {
             if (contract.category == cat.id) returns.push(contract);
           }
@@ -145,47 +89,45 @@ export default {
       return returns;
     },
 
-    handleNewContract(contract) {
-      this.$refs.addContract.close();
-      contracts.push(contract);
-    },
+    /* Communication with "New Contract" window */
 
     addContract() {
-      this.$refs.addContract.open(this.selectedCategory.id);
+      this.$refs.addContract.openNewContract(this.selectedCategory.id);
+    },
+
+    updateContract(contract) {
+      this.$refs.addContract.openForChange(contract);
+    },
+
+    handleDeleteRequest(uuid) {
+      for (let index in this.contracts) {
+        if (this.contracts[index].uuid == uuid) {
+          this.contracts.splice(index, 1);
+          break;
+        }
+      }
+    },
+
+    handleNewContract(contract) {
+      for (let index in this.contracts) {
+        if (this.contracts[index].uuid == contract.uuid) {
+          contract.uuid = uuidv1();
+          this.$set(this.contracts, index, { ...contract });
+          return;
+        }
+      }
+      this.contracts.push(contract);
+    },
+
+    /* Communication with button bar */
+    handleCategorySelected(category) {
+      this.selectedCategory = category;
     }
   }
 };
 </script>
 
 <style scoped>
-#contracts {
-  width: 100%;
-  height: 100%;
-  padding: 2%;
-  box-sizing: border-box;
-}
-
-#buttonbar {
-  height: 5%;
-  width: 100%;
-  background-color: green;
-  display: flex;
-  margin-bottom: 10px;
-}
-
-#content {
-  height: 95%;
-  width: 100%;
-  background-color: var(--c4);
-  color: var(--ct1);
-  padding: 3%;
-  box-sizing: border-box;
-}
-
-#Abwasser {
-  border-right: 0px;
-}
-
 #btn_addContract {
   margin-top: 15px;
   border: 1px solid;
@@ -200,25 +142,6 @@ export default {
 #btn_addContract:hover {
   background-color: var(--c4);
   cursor: pointer;
-}
-
-.button {
-  width: 25%;
-  float: left;
-  border-right: 1px solid;
-  display: grid;
-  align-content: center;
-  background-color: var(--c2);
-  transition: background-color 0.4s ease-in-out;
-}
-
-.button:hover {
-  background-color: var(--c2hover);
-  cursor: pointer;
-}
-
-.selected {
-  background-color: var(--c2high) !important;
 }
 
 table {
@@ -236,5 +159,7 @@ th {
 
 tr:not(:first-child):hover {
   background-color: var(--c3);
+  cursor: pointer;
 }
+
 </style>

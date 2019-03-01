@@ -47,6 +47,7 @@ export default {
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 #content {
   background-color: var(--c3); /*#18435A*/ /*lightgray*/
@@ -74,7 +75,7 @@ export default {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-/*https://codepen.io/devstreak/pen/dMYgeO*/
+/* https://codepen.io/devstreak/pen/dMYgeO */
 ::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   border-radius: 10px;
