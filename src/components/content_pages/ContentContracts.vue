@@ -1,6 +1,6 @@
 <template>
 
-  <ContentWrapper id="contracts">
+  <ContentWrapper id="contracts" :useInnerBox="true">
     
     <template #outer>
       <ButtonBar 
@@ -10,6 +10,7 @@
     </template>
 
     <template #inner>
+      <div id="grid_item">
       <table v-if="getContracts().length > 0">
         <tr>
           <th>Vertragspartner</th>
@@ -47,13 +48,13 @@
       <p v-else>Noch keine Verträge hinzugefügt.</p>
 
       <div id="btn_addContract" v-on:click="addContract()">+</div>
+      </div>
+      <AddContract
+        v-on:inputDone="handleNewContract"
+        v-on:deleteRequest="handleDeleteRequest"
+        ref="addContract"
+      />
     </template>
-
-    <AddContract
-      v-on:inputDone="handleNewContract"
-      v-on:deleteRequest="handleDeleteRequest"
-      ref="addContract"
-    />
 
   </ContentWrapper>
 
@@ -96,6 +97,7 @@ export default {
     },
 
     updateContract(contract) {
+      console.log(this.$refs);
       this.$refs.addContract.openForChange(contract);
     },
 
@@ -144,22 +146,9 @@ export default {
   cursor: pointer;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-tr,
-td,
-th {
-  border-bottom: 1px solid var(--ct1);
-  padding: 15px;
-  margin: 0;
-}
-
-tr:not(:first-child):hover {
-  background-color: var(--c3);
-  cursor: pointer;
+#grid_item {
+  min-width: 100%; 
+  grid-column: 1 / span 2;
 }
 
 </style>

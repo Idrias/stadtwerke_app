@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import Handle from "./components/Handle.vue";
-import Navbar from "./components/Navbar.vue";
+import Handle from "./components/elements/Handle.vue";
+import Navbar from "./components/elements/Navbar.vue";
 
 export default {
   name: "app",
@@ -73,6 +73,24 @@ export default {
 
 .shadow {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+tr,
+td,
+th {
+  border-bottom: 1px solid var(--ct1);
+  padding: 15px;
+  margin: 0;
+}
+
+tr:not(:first-child):hover {
+  background-color: var(--c3);
+  cursor: pointer;
 }
 
 /* https://codepen.io/devstreak/pen/dMYgeO */

@@ -107,7 +107,7 @@
         <br />
         <div id="buttonBar">
           <button class="shadow" v-if="changeMode" v-on:click="closeAndDelete()">
-            Vertrag löschen
+            Löschen
           </button>
           <button class="shadow" v-on:click="close()">Abbrechen</button>
           <button class="shadow" v-on:click="closeAndUpdate()">Speichern</button>

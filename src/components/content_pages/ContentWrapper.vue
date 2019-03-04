@@ -1,16 +1,17 @@
 <template>
   <div class="contentWrapper-outer">
     <slot name="outer"></slot>
-    <div class="contentWrapper-inner shadow">
+    <div class="contentWrapper-inner shadow" v-if="useInnerBox">
         <slot name="inner"></slot>
     </div>
+    <slot v-else name="inner"></slot>
   </div>
 </template>
 
 <script>
   export default {
     name: "ContentWrapper",
-    props: {},
+    props: {useInnerBox: Boolean},
   };
 </script>
 
@@ -28,5 +29,9 @@
     color: var(--ct1);
     padding: 3%;
     overflow: auto;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto;
+    grid-gap: 10px;
   }
 </style>

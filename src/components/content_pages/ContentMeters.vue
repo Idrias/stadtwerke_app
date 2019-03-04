@@ -1,6 +1,6 @@
 <template>
 
-    <ContentWrapper id="meters">
+    <ContentWrapper id="meters" :useInnerBox="true">
     
       <template #outer>
         <ButtonBar 
@@ -10,7 +10,36 @@
       </template>
 
       <template #inner>
-        Hello World!
+
+      <div id="test" class="shadow">
+        <h2>Zählerauswahl</h2><br>
+        
+        <table style>
+          <tr>
+            <th> Zählernummer </th>
+            <th> Bemerkung </th>
+          </tr>
+
+          <tr><td>0312421</td><td>EG</td></tr>
+          <tr><td>0312421</td><td>EG</td></tr>
+          <tr><td>0312421</td><td>EG</td></tr>
+        </table>
+        
+      </div>
+
+      <div id="readings" class="shadow">
+        <h2>Ablesungen</h2><br>
+        <table>
+          
+          <tr>
+            <th> Datum </th>
+            <th> Zählerstand </th>
+            <th> Bemerkung </th>
+          </tr>
+        </table>
+      </div>
+
+
       </template>
 
     </ContentWrapper>
@@ -40,4 +69,27 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+
+#test {
+  width: 100%;
+  grid-row: 1;
+  grid-column: 1;
+  background-color: var(--c3);
+  justify-self: center;
+  padding: 30px;
+}
+
+#readings {
+  width: 100%;
+  min-width: 100%;
+  background-color: var(--c3);
+  padding: 30px;
+  justify-self: center;
+}
+
+table {
+  width: 100%;  
+}
+
+</style>
