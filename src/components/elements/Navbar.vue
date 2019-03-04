@@ -34,7 +34,7 @@ export default {
         { name: "Übersicht", route: "/", selected: true },
         { name: "Verträge", route: "/contracts", selected: false },
         { name: "Zählerstände", route: "/meters", selected: false },
-        { name: "Statistiken", route: "/statistics", selected: false }
+        { name: "Abrechnung", route: "/statistics", selected: false }
       ]
     };
   }

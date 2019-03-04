@@ -29,9 +29,5 @@
     color: var(--ct1);
     padding: 3%;
     overflow: auto;
-    display: grid;
-    grid-template-columns: auto auto;
-    grid-template-rows: auto;
-    grid-gap: 10px;
   }
 </style>

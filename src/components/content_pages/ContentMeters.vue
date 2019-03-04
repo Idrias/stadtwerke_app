@@ -1,6 +1,6 @@
 <template>
 
-    <ContentWrapper id="meters" :useInnerBox="true">
+    <ContentWrapper id="meters" :useInnerBox="false">
     
       <template #outer>
         <ButtonBar 
@@ -10,35 +10,64 @@
       </template>
 
       <template #inner>
+      <div class="gridContainer">
+        <div id="metersContainer" class="shadow">
+          <h2>Zählerauswahl</h2><br>
+          <table v-if="getMeters().length > 0" id="metersTable">
+            <tr>
+              <th> Zählernummer </th>
+              <th> Bemerkung </th>
+              <!--<th> </th>-->
+            </tr>
+            <tr 
+              v-for="meter of getMeters()" 
+              v-bind:key="meter.uuid" 
+              v-on:click="selectMeter(meter)" 
+              v-bind:class="{selected: meter===selectedMeter}"
+              @contextmenu="$refs.addMeter.openForChange(meter)"
+            >
+              <td>{{meter.mid}}</td>
+              <td>{{meter.comment}}</td>
+              <!--<td><i class="fas fa-pencil-alt"></i></td>-->
+            </tr>
+          </table>
+          <p v-else>Noch keine Zähler hinzugefügt.</p>
 
-      <div id="test" class="shadow">
-        <h2>Zählerauswahl</h2><br>
-        
-        <table style>
-          <tr>
-            <th> Zählernummer </th>
-            <th> Bemerkung </th>
-          </tr>
 
-          <tr><td>0312421</td><td>EG</td></tr>
-          <tr><td>0312421</td><td>EG</td></tr>
-          <tr><td>0312421</td><td>EG</td></tr>
-        </table>
-        
-      </div>
-
-      <div id="readings" class="shadow">
-        <h2>Ablesungen</h2><br>
-        <table>
+          <AddButton v-on:click="addMeter"/>
           
-          <tr>
-            <th> Datum </th>
-            <th> Zählerstand </th>
-            <th> Bemerkung </th>
-          </tr>
-        </table>
+        </div>
+
+        <div id="readings" class="shadow">
+          <h2>Ablesungen</h2><br>
+          
+          <div v-if="selectedMeter != null && getReadings().length > 0">
+            <table>
+              <tr>
+                <th> Datum </th>
+                <th> Zählerstand </th>
+                <th> Bemerkung </th>
+              </tr>
+
+              <tr v-for="reading of getReadings()" v-bind:key="reading.uuid" v-on:click="$refs.addReading.openForChange(reading)">
+                <td> {{reading.date}} </td>
+                <td> {{reading.value}} </td>
+                <td> {{reading.comment}} </td>
+              </tr>
+
+            </table>
+          </div>
+          <p v-if="selectedMeter == null"> Bitte zunächst einen Zähler auswählen. </p> 
+          <p v-else-if="getReadings().length == 0"> Noch keine Ablesung für Zähler {{selectedMeter.mid}} eingetragen. </p>
+          <AddButton v-if="selectedMeter != null" v-on:click="addReading"/>
+
+
+        </div>
+
       </div>
 
+      <AddMeter ref="addMeter" v-on:meterDeleted="handleMeterDeleted" v-on:meterChanged="handleMeterChanged"/>
+      <AddReading ref="addReading" />
 
       </template>
 
@@ -48,15 +77,19 @@
 
 <script>
 import ButtonBar from "../elements/ButtonBar.vue";
-import ContentWrapper from "./ContentWrapper.vue"
+import ContentWrapper from "./ContentWrapper.vue";
+import AddButton from "../elements/AddButton.vue";
+import AddMeter from "../dialogues/AddMeter.vue";
+import AddReading from "../dialogues/AddReading.vue";
 
 export default {
   name: "ContentMeters",
   props: {},
-  components: {ButtonBar, ContentWrapper},
+  components: {ButtonBar, ContentWrapper, AddButton, AddMeter, AddReading},
   data() {
     let el = {
       ...this.$root.$data.sharedState,
+      selectedMeter: null
     }
     el.selectedCategory = el.categories[0];
     return el;
@@ -64,6 +97,52 @@ export default {
   methods: {
     handleCategorySelected(category) {
       this.selectedCategory = category;
+      this.selectedMeter = null;
+    },
+
+    handleMeterDeleted(uuid) {
+      console.log("look");
+      if(uuid == this.selectedMeter.uuid) this.selectedMeter = null;
+    },
+
+    handleMeterChanged(data) {
+      if(data.uuid_old == this.selectedMeter.uuid) {
+        let newMeter = this.meters.find( meter => meter.uuid == data.uuid_new);
+        if(newMeter) this.selectedMeter = newMeter;
+      }
+    },
+
+    addMeter() {
+      this.$refs.addMeter.openNewMeter(this.selectedCategory.id);
+    },
+
+    addReading() {
+      this.$refs.addReading.openNewReading(this.selectedMeter.uuid);
+    },
+
+    getMeters() {
+      let returns = [];
+      for (let cat of this.categories) {
+        if (cat === this.selectedCategory) {
+          for (let meter of this.meters) {
+            if (meter.category == cat.id) returns.push(meter);
+          }
+        }
+      }
+      return returns;
+    },
+
+    getReadings() {
+      let returns = [];
+      for(let reading of this.readings) {
+        if(reading.m_uuid == this.selectedMeter.uuid) returns.push(reading);
+      }
+      return returns;
+    },
+
+    selectMeter(meter) {
+      console.log("Selecting " + meter)
+      this.selectedMeter = meter;
     }
   }
 };
@@ -71,11 +150,11 @@ export default {
 
 <style scoped>
 
-#test {
+#metersContainer {
   width: 100%;
   grid-row: 1;
   grid-column: 1;
-  background-color: var(--c3);
+  background-color: var(--c4);
   justify-self: center;
   padding: 30px;
 }
@@ -83,13 +162,44 @@ export default {
 #readings {
   width: 100%;
   min-width: 100%;
-  background-color: var(--c3);
-  padding: 30px;
   justify-self: center;
+  background-color: var(--c4);
+  padding: 30px;
+}
+
+#metersTable {
+  table-layout: fixed;
 }
 
 table {
   width: 100%;  
+}
+
+td {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.gridContainer {
+    height: 95%;
+    width: 100%;
+    color: var(--ct1);
+
+    overflow: auto;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto;
+    grid-gap: 1%;
+    grid-template-columns: minmax(332px, 35%) auto;
+}
+
+.selected {
+  background-color: var(--c3) !important;
+}
+
+tr:not(:first-child):hover {
+  background-color: var(--cm34);
 }
 
 </style>

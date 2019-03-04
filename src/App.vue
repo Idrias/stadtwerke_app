@@ -25,6 +25,7 @@ export default {
 </script>
 
 <style>
+@import "../node_modules/@fortawesome/fontawesome-free/css/all.css";
 :root {
   --c0: #1e2124;
   --c1: #282b30;
@@ -36,6 +37,7 @@ export default {
 
   --c3: #36393e;
   --c4: #424549;
+  --cm34:#3C3F44;
 
   --c2high: #ddeaea;
   --c2hover: #a8bae2;
@@ -89,7 +91,7 @@ th {
 }
 
 tr:not(:first-child):hover {
-  background-color: var(--c3);
+  background-color: var(--cm34);
   cursor: pointer;
 }
 

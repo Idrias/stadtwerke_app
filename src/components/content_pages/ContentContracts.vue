@@ -15,12 +15,13 @@
         <tr>
           <th>Vertragspartner</th>
           <th>Vertragsnummer</th>
+          <th>Zähler</th>
           <th>Start</th>
           <th>Ende</th>
           <th>Fixkosten</th>
           <th v-if="selectedCategory.id != 3">Variable Kosten</th>
-          <th v-if="selectedCategory.id == 3">Kosten Schmutzwasser</th>
-          <th v-if="selectedCategory.id == 3">Kosten Niederschlag</th>
+          <th v-if="selectedCategory.id == 3">Schmutzwasser</th>
+          <th v-if="selectedCategory.id == 3">Niederschlag</th>
         </tr>
 
         <tr
@@ -30,6 +31,7 @@
         >
           <td>{{ contract.company }}</td>
           <td>{{ contract.cid }}</td>
+          <td>{{getMeter(contract.m_uuid).mid}}</td>
           <td>{{ contract.start }}</td>
           <td>{{ contract.end }}</td>
           <td>{{ contract.costfix }} €/Jahr</td>
@@ -46,8 +48,7 @@
       </table>
 
       <p v-else>Noch keine Verträge hinzugefügt.</p>
-
-      <div id="btn_addContract" v-on:click="addContract()">+</div>
+      <AddButton v-on:click="addContract()"/>
       </div>
       <AddContract
         v-on:inputDone="handleNewContract"
@@ -65,11 +66,12 @@ const uuidv1 = require("uuid/v1");
 import AddContract from "../dialogues/AddContract.vue";
 import ButtonBar from "../elements/ButtonBar.vue";
 import ContentWrapper from "./ContentWrapper.vue";
+import AddButton from "../elements/AddButton.vue";
 
 export default {
   name: "ContentContracts",
   props: {},
-  components: { AddContract, ButtonBar, ContentWrapper },
+  components: { AddContract, ButtonBar, ContentWrapper, AddButton },
   data() {
     let el = {
       ...this.$root.$data.sharedState,
@@ -93,6 +95,7 @@ export default {
     /* Communication with "New Contract" window */
 
     addContract() {
+      console.log("Adding..")
       this.$refs.addContract.openNewContract(this.selectedCategory.id);
     },
 
@@ -124,31 +127,19 @@ export default {
     /* Communication with button bar */
     handleCategorySelected(category) {
       this.selectedCategory = category;
+    },
+
+    getMeter(m_uuid) {
+      if(m_uuid == "0") return {mid: "(alle)"}
+      for(let meter of this.meters) {
+        if(m_uuid == meter.uuid) return meter;
+      }
+      return {mid: "?"};
+      
     }
   }
 };
 </script>
 
 <style scoped>
-#btn_addContract {
-  margin-top: 15px;
-  border: 1px solid;
-  border-radius: 35%;
-  width: 38px;
-  height: 38px;
-  display: inline-grid;
-  align-content: center;
-  background-color: var(--c3);
-}
-
-#btn_addContract:hover {
-  background-color: var(--c4);
-  cursor: pointer;
-}
-
-#grid_item {
-  min-width: 100%; 
-  grid-column: 1 / span 2;
-}
-
 </style>

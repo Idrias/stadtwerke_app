@@ -1,11 +1,10 @@
 <template>
-  <div id="AddContract" v-if="show" v-on:click="close()">
-    <div id="contractCreationWindow" class="shadow" v-on:click.stop>
-      <h2 v-if="changeMode">Vertrag bearbeiten</h2>
-      <h2 v-else>Neuer Vertrag</h2>
-      <form v-on:submit.prevent>
-        Vertragsart <br />
+  <DialogueWrapper :show="show" :title="title" v-on:close="close">
 
+      <form v-on:submit.prevent>
+
+        <!-- Vertragsart festlegen -->
+        <p>Vertragsart</p>
         <table>
           <tr>
             <td class="radiotd">
@@ -48,8 +47,9 @@
           </tr>
         </table>
 
-        <br />
+        <br>
 
+        <!-- Vertragsinformationen angeben -->
         <table>
           <tr>
             <td>Vertragspartner</td>
@@ -61,6 +61,18 @@
           <tr>
             <td>Vertragsnummer</td>
             <td><input class="textinput" type="text" v-model="input.cid" /></td>
+          </tr>
+
+          <tr>
+            <td>Zähler</td>
+            <td>
+              <select v-model="input.m_uuid">
+                <option value="0">(alle)</option>
+                <option v-for="meter in getMeters()" v-bind:key="meter.uuid" v-bind:value="meter.uuid">
+                  {{meter.mid}}
+                </option>
+              </select>
+            </td>
           </tr>
 
           <tr>
@@ -104,30 +116,34 @@
           </tr>
         </table>
 
-        <br />
+        <br>
+
+        <!-- Buttons -->
         <div id="buttonBar">
           <button class="shadow" v-if="changeMode" v-on:click="closeAndDelete()">
             Löschen
           </button>
           <button class="shadow" v-on:click="close()">Abbrechen</button>
           <button class="shadow" v-on:click="closeAndUpdate()">Speichern</button>
-
         </div>
       </form>
-    </div>
-  </div>
+
+  </DialogueWrapper>
 </template>
 
 <script>
 const uuidv1 = require("uuid/v1");
+import DialogueWrapper from "./DialogueWrapper.vue";
 
 export default {
   name: "AddContract",
+  components: {DialogueWrapper},
   props: {},
   data() {
     return {
       show: false,
       changeMode: false,
+      title: "This is the title!",
 
       input: {
         company: null,
@@ -139,7 +155,8 @@ export default {
         costvarrain: null,
         costvardirty: null,
         category: null,
-        uuid: null
+        uuid: null,
+        m_uuid: null,
       },
       ...this.$root.$data.sharedState,
     };
@@ -158,6 +175,7 @@ export default {
     },
 
     openNewContract(defaultRadio) {
+      this.title = "Neuer Vertrag";
       this.changeMode = false;
 
       for (let key in this.input) {
@@ -170,6 +188,7 @@ export default {
     },
 
     openForChange(currentVersion) {
+      this.title = "Vertrag bearbeiten";
       this.changeMode = true;
       Object.assign(this.input, currentVersion);
       this.show = true;
@@ -183,79 +202,20 @@ export default {
       }
     },
 
+    getMeters() {
+      let returns = [];
+      for(let meter of this.meters) {
+        if(meter.category == this.input.category) {
+          returns.push(meter);
+        }
+      }
+      return returns;
+    }
+
   }
 };
 </script>
 
 <style scoped>
-#contractCreationWindow {
-  width: 50%;
-  
-  max-height: 80%;
-  background-color: var(--c3);
-  color: var(--ct1);
-  padding: 30px;
-  box-sizing: border-box;
-  margin-left: 32.5%;
-  margin-top: 5%;
-  overflow-y: auto;
-}
 
-#AddContract {
-  position: fixed;
-  display: block;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: 2;
-}
-
-input {
-  background-color: var(--c4);
-  border: none;
-}
-
-table {
-  margin: 0px auto;
-  width: 70%;
-}
-
-button {
-  background-color: var(--c2);
-  border: 0;
-  width: 30%;
-  height: 30px;
-  margin: 8px;
-}
-
-button:hover {
-  background-color: var(--c2hover);
-  cursor: pointer;
-}
-
-tr,
-td {
-  height: 40px;
-}
-
-form {
-  margin: 10px;
-}
-
-.textinput {
-  height: 25px;
-  width: 100%;
-  color: var(--c2);
-}
-
-.radiotd {
-  width: 70px;
-  max-width: 70px;
-}
-
-#buttonBar {
-  margin-top: 20px;
-}
 </style>
