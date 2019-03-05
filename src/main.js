@@ -7,16 +7,16 @@ Vue.config.productionTip = false;
 let vue = new Vue({
   render: h => h(App),
   router,
-  data: { 
-    sharedState: {} 
+  data: {
+    sharedState: {}
   },
 
-  created: function() {
+  created: function () {
     console.log("Root Vue instance created. Now reading data.")
     let stateString = window.localStorage.getItem("applicationState")
     console.log(stateString);
-    
-    if(stateString != "null")
+
+    if (stateString != "null")
       this.sharedState = JSON.parse(stateString);
 
     else
@@ -24,7 +24,7 @@ let vue = new Vue({
         categories: [
           { id: 0, name: "Strom", unit: "kWh" },
           { id: 1, name: "Gas", unit: "kWh" },
-          { id: 2, name: "Wasser",  unit: "m³" },
+          { id: 2, name: "Wasser", unit: "m³" },
           { id: 3, name: "Abwasser", unit: "m³" }
         ],
         contracts: [],
@@ -32,7 +32,7 @@ let vue = new Vue({
         readings: []
       };
 
-      console.log(this.sharedState);
+    console.log(this.sharedState);
 
   },
 
@@ -48,6 +48,6 @@ let vue = new Vue({
   }
 }).$mount("#app");
 
-window.exportJson = function() {
+window.exportJson = function () {
   console.log(JSON.stringify(vue.$data));
 }

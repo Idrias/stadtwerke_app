@@ -15,7 +15,7 @@
             <tr>
                 <td>Ablesedatum</td>
                 <td>
-                    <input class="textinput" type="date" v-model="input.date" />
+                    <input class="textinput" type="date" v-model="input.date"/>
                 </td>
             </tr>
 
@@ -103,6 +103,7 @@ export default {
       }
       this.input.m_uuid = m_uuid;
       this.input.uuid = uuidv1();
+      this.input.date = new Date().toISOString().substr(0, 10);
       this.show = true;
     },
 

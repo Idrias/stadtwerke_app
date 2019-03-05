@@ -89,6 +89,11 @@ tr,td,th {
   border-bottom: none;
 }
 
+tr:hover,td:hover,th:hover {
+  background-color: var(--c3);
+  cursor: auto;
+}
+
 form {
   margin: 10px;
 }

@@ -32,9 +32,11 @@ export default {
     return {
       buttons: [
         { name: "Übersicht", route: "/", selected: true },
-        { name: "Verträge", route: "/contracts", selected: false },
         { name: "Zählerstände", route: "/meters", selected: false },
-        { name: "Abrechnung", route: "/statistics", selected: false }
+        { name: "Verträge", route: "/contracts", selected: false },
+        { name: "Parteien", route: "/parties", selected: false },
+        { name: "Abrechnung", route: "/billing", selected: false },
+        { name: "Statistik", route: "/statistics", selected: false }
       ]
     };
   }
