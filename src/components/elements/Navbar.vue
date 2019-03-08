@@ -57,14 +57,14 @@ export default {
 }
 
 .navbar-button {
-  background-color: var(--c2);
+  background-color: var(--c1);
+  color: var(--ct1);
   text-align: center;
   height: 3%;
   padding: 12%;
-
-  border-style: none none solid none;
-  border-width: thin;
-
+  margin: 0 10px 0 10px;
+  border-radius: 3%;
+  border-left: medium solid transparent;
   transition: background-color 0.4s ease-in-out;
   cursor: pointer;
 
@@ -73,11 +73,16 @@ export default {
 }
 
 .navbar-button:hover {
-  background-color: var(--c2hover);
+  background-color: var(--cm14);
   cursor: pointer;
 }
 
 .selected {
-  background-color: var(--c2high) !important;
+  background-color: var(--c4) !important;
+  color: white;
+
+    border-style: none none none solid;
+  border-width: medium;
+  border-color: var(--c2);
 }
 </style>

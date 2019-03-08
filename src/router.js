@@ -4,6 +4,7 @@ import ContentContracts from "./components/content_pages/ContentContracts.vue";
 import ContentOverview from "./components/content_pages/ContentOverview.vue";
 import ContentMeters from "./components/content_pages/ContentMeters";
 import ContentStatistics from "./components/content_pages/ContentStatistics";
+import ContentBilling from "./components/content_pages/ContentBilling.vue";
 Vue.use(Router);
 
 export default new Router({
@@ -22,6 +23,11 @@ export default new Router({
       path: "/meters",
       name: "meters",
       component: ContentMeters
+    },
+    {
+      path: "/billing",
+      name: "billing",
+      component: ContentBilling
     },
     {
       path: "/statistics",

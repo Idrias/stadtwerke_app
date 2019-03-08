@@ -36,19 +36,26 @@
 		float: left;
 		flex: 1;
 		border-right: 1px solid;
+		border-bottom: thin solid transparent;
+
+		border-color: var(--c0);
+		color: var(--ct1);
 		display: grid;
 		align-content: center;
-		background-color: var(--c2);
+		background-color: var(--c1);
 		transition: background-color 0.4s ease-in-out;
 	}
 
 	.button:hover {
-		background-color: var(--c2hover);
+		background-color: var(--cm14);
 		cursor: pointer;
 	}
 
 	.selected {
-		background-color: var(--c2high) !important;
+		background-color: var(--c4) !important;
+		color: white;
+
+		border-bottom: thin solid var(--c2); 
 	}
 
 	#buttonbar {
@@ -56,7 +63,7 @@
 		max-height: 40px;
 		min-height: 30px;
 		width: 100%;
-		background-color: green;
+		
 		display: flex;
 		margin-bottom: 10px;
 	}

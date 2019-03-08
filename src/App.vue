@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Handle title="Stadtwerke Verwaltungsapp"></Handle>
+    <Handle title="Abrechnungsapp"></Handle>
 
     <div id="main">
       <Navbar></Navbar>
@@ -35,8 +35,10 @@ export default {
   --c2hover: rgb(168,210,151);
   */
 
-  --c3: #36393e;
+  --c3: #36393e; /*#263244;*/
   --c4: #424549;
+
+  --cm14:#2F3237;
   --cm34:#3C3F44;
 
   --c2high: #ddeaea;

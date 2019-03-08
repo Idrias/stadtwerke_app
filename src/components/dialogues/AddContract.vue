@@ -67,7 +67,6 @@
             <td>Zähler</td>
             <td>
               <select v-model="input.m_uuid">
-                <option value="0">(alle)</option>
                 <option v-for="meter in getMeters()" v-bind:key="meter.uuid" v-bind:value="meter.uuid">
                   {{meter.mid}}
                 </option>
