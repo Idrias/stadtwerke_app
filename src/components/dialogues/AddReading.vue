@@ -82,6 +82,7 @@ export default {
         }
       }
       this.readings.push({...this.input});
+
     },
 
     closeAndDelete() {

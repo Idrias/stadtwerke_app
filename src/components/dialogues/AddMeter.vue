@@ -62,6 +62,11 @@
             <td>Kommentar</td>
             <td><input class="textinput" type="text" v-model="input.comment" /></td>
           </tr>
+
+          <tr v-if="input.category == 2">
+            <td>Verursacht Abwasser</td>
+            <td><input type="checkbox" v-model="input.producesDirtyWater"/></td>
+          </tr>
         </table>
 
         <br>
@@ -99,7 +104,8 @@ export default {
         mid: null,
         category: null,
         uuid: null,
-        comment: null
+        comment: null,
+        producesDirtyWater: true,
       },
       ...this.$root.$data.sharedState,
     };
@@ -112,6 +118,9 @@ export default {
 
     closeAndUpdate() {
       this.close();
+
+      if(this.input.category != 2) this.input.producesDirtyWater = false;
+
       for (let index in this.meters) {
         if (this.meters[index].uuid == this.input.uuid) {
           let uuid_old = this.input.uuid;
@@ -122,7 +131,9 @@ export default {
           return;
         }
       }
+      
       this.meters.push({...this.input});
+      
     },
 
     closeAndDelete() {
@@ -145,6 +156,7 @@ export default {
       }
       this.input.category = defaultRadio;
       this.input.uuid = uuidv1();
+      this.input.producesDirtyWater = true;
       this.show = true;
     },
 

@@ -62,7 +62,8 @@
 					<p
 						v-else-if="getReadings().length == 0"
 					>Noch keine Ablesung für Zähler {{selectedMeter.mid}} eingetragen.</p>
-					<AddButton v-if="selectedMeter != null" v-on:click="addReading"/>
+					<AddButton v-if="selectedMeter != null && selectedMeter.category != 2" v-on:click="addReading"/>
+					<p v-else-if="selectedMeter">Eingetragene Zählerstände werden für Abwasser berücksichtigt.</p> 
 				</div>
 			</div>
 
@@ -124,15 +125,7 @@
 			},
 
 			getMeters() {
-				let returns = [];
-				for (let cat of this.categories) {
-					if (cat === this.selectedCategory) {
-						for (let meter of this.meters) {
-							if (meter.category == cat.id) returns.push(meter);
-						}
-					}
-				}
-				return returns;
+				return this.meters.filter(m => m.category == this.selectedCategory.id || this.selectedCategory.id==3 && m.producesDirtyWater)
 			},
 
 			getReadings() {
@@ -194,7 +187,7 @@
 
 		overflow: auto;
 		display: grid;
-		grid-template-columns: auto auto;
+
 		grid-template-rows: auto;
 		grid-gap: 1%;
 		grid-template-columns: minmax(332px, 35%) auto;

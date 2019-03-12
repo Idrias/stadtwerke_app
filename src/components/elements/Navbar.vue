@@ -11,6 +11,7 @@
     >
       {{ button.name }}
     </div>
+
   </div>
 </template>
 
@@ -85,4 +86,10 @@ export default {
   border-width: medium;
   border-color: var(--c2);
 }
+
+.fa-cogs {
+
+  color: darkgray;
+}
+
 </style>

@@ -19,7 +19,7 @@
   .contentWrapper-outer {
     width: 100%;
     height: 100%;
-    padding: 2%;
+    padding: 1.5%;
     box-sizing: border-box;
   }
   .contentWrapper-inner {
