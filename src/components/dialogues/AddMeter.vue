@@ -126,8 +126,12 @@ export default {
           let uuid_old = this.input.uuid;
           let uuid_new = uuidv1();
           this.input.uuid = uuid_new;
+
+          this.readings.forEach(reading => {if(reading.m_uuid == uuid_old) reading.m_uuid = uuid_new});
+
           this.$set(this.meters, index, { ...this.input });
           this.$emit("meterChanged", {uuid_old: uuid_old, uuid_new: uuid_new});
+
           return;
         }
       }

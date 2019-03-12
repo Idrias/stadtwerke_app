@@ -3,6 +3,7 @@
 		<template #outer>
 			<ButtonBar
 				v-bind:selectedCategory="selectedCategory"
+				v-bind:categories="getCategories()"
 				v-on:categorySelected="handleCategorySelected"
 			></ButtonBar>
 		</template>
@@ -37,7 +38,9 @@
 
 				<div id="readings" class="shadow">
 					<h2>Ablesungen</h2>
+					
 					<br>
+
 
 					<div v-if="selectedMeter != null && getReadings().length > 0">
 						<table>
@@ -62,8 +65,12 @@
 					<p
 						v-else-if="getReadings().length == 0"
 					>Noch keine Ablesung für Zähler {{selectedMeter.mid}} eingetragen.</p>
-					<AddButton v-if="selectedMeter != null && selectedMeter.category != 2" v-on:click="addReading"/>
-					<p v-else-if="selectedMeter">Eingetragene Zählerstände werden für Abwasser berücksichtigt.</p> 
+					<AddButton v-if="selectedMeter != null" v-on:click="addReading"/>
+
+					<p v-if="selectedMeter && selectedMeter.producesDirtyWater" id="abwasserNotice">Eingetragene Zählerstände werden für Abwasserkosten berücksichtigt.</p> 
+					
+					
+				
 				</div>
 			</div>
 
@@ -140,6 +147,10 @@
 			selectMeter(meter) {
 				console.log("Selecting " + meter);
 				this.selectedMeter = meter;
+			},
+
+			getCategories() {
+				return this.categories.filter(cat => cat.meterRelevant);
 			}
 		}
 	};
@@ -164,6 +175,10 @@
 		justify-self: center;
 		background-color: var(--c4);
 		padding: 30px;
+	}
+
+	#abwasserNotice {
+		margin-top: 30px;
 	}
 
 	#metersTable {

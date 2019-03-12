@@ -19,13 +19,13 @@ let vue = new Vue({
     if (stateString != "null")
       this.sharedState = JSON.parse(stateString);
 
-    else
+    if (stateString == "null" || this.sharedState == {})
       this.sharedState = {
         categories: [
-          { id: 0, name: "Strom", unit: "kWh" },
-          { id: 1, name: "Gas", unit: "kWh" },
-          { id: 2, name: "Wasser", unit: "m³" },
-          { id: 3, name: "Abwasser", unit: "m³" }
+          { id: 0, name: "Strom", unit: "kWh", meterRelevant: true },
+          { id: 1, name: "Gas", unit: "kWh", meterRelevant: true },
+          { id: 2, name: "Wasser", unit: "m³", meterRelevant: true },
+          { id: 3, name: "Abwasser", unit: "m³", meterRelevant: false }
         ],
         contracts: [],
         meters: [],

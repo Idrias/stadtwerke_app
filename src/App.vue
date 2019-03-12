@@ -52,7 +52,9 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  user-select: none;
 }
+
 #content {
   background-color: var(--c3); /*#18435A*/ /*lightgray*/
   width: 85%;
