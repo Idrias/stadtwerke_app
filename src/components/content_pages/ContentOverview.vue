@@ -25,7 +25,7 @@
             <h3> Optionen </h3>
             <button class="shadow"> Daten exportieren </button>
             <button class="shadow"> Daten importieren </button>
-            <button class="shadow"> Color Theme wechseln </button>
+            <button class="shadow" v-on:click="$root.cycleTheme()"> Color Theme wechseln </button>
           </div>
         </div>
 
