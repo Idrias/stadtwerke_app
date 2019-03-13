@@ -66,11 +66,12 @@
           <tr>
             <td>Zähler</td>
             <td>
-              <select v-model="input.m_uuid">
+              <select v-model="input.m_uuid" v-if="getMeters().length > 0">
                 <option v-for="meter in getMeters()" v-bind:key="meter.uuid" v-bind:value="meter.uuid">
                   {{meter.mid}}
                 </option>
               </select>
+              <p v-else>Keine passenden Zähler gefunden!</p>
             </td>
           </tr>
 
@@ -104,6 +105,12 @@
             <td>Kosten Niederschlag<br>(€/m²)</td>
             <td>
               <input class="textinput" type="text" v-model="input.costvarrain" />
+            </td>
+          </tr>
+          <tr v-if="input.category == 3">
+            <td>Grundstücksgröße<br>(m²)</td>
+            <td>
+              <input class="textinput" type="text" v-model="input.costvararea" />
             </td>
           </tr>
 
@@ -153,6 +160,7 @@ export default {
         costvar: null,
         costvarrain: null,
         costvardirty: null,
+        costvararea: null,
         category: null,
         uuid: null,
         m_uuid: null,
@@ -166,6 +174,9 @@ export default {
     },
     closeAndUpdate() {
       this.close();
+
+      if(this.input.end == null) this.input.end = "9999-12-31";
+
       this.$emit("inputDone", { ...this.input });
     },
     closeAndDelete() {
@@ -181,6 +192,7 @@ export default {
         this.input[key] = null;
       }
 
+      this.input.end = "9999-12-31";
       this.input.category = defaultRadio;
       this.input.uuid = uuidv1();
       this.show = true;

@@ -15,6 +15,23 @@
 
           <div id="activeContracts" class="gridContent shadow">
             <h3>Aktive Verträge</h3>
+            
+            <table>
+              <tr>
+                <th> Kategorie </th>
+                <th> Vertragspartner </th>
+                <th> Vertragsnummer </th>
+                <th> Aktiv seit </th> 
+              </tr>
+
+              <tr v-for="contract of getActiveContracts()" v-bind:key="contract.uuid">
+                <td>{{contract.catName}}
+                <td>{{contract.company}}</td>
+                <td>{{contract.cid}}</td>
+                <td>{{contract.start}}</td>
+              </tr>
+            </table>
+
           </div>
 
           <div id="expectedExpenses" class="gridContent shadow">
@@ -40,6 +57,11 @@ import ContentWrapper from "./ContentWrapper.vue";
 export default {
   name: "ContentOverview",
   components: {ContentWrapper},
+  data() {
+    return {
+      ...this.$root.$data.sharedState
+    }
+  },
   props: {},
   methods: {
     getGreeting() {
@@ -48,6 +70,17 @@ export default {
       if(hours >= 12 && hours < 18) return "Guten Tag.";
       if(hours >= 18 || hours < 3) return "Guten Abend.";
       return "Hallo.";
+    },
+
+    getActiveContracts() {
+      let today = new Date();
+      return this.contracts
+        .filter(contract => new Date(contract.start) < today && new Date(contract.end) > today)
+        .sort((a,b) => a.category > b.category)
+        .map(contract => contract = {...contract, catName: 
+          this.categories.find(cat => cat.id == contract.category).name
+        });
+
     }
   }
 };
@@ -59,7 +92,7 @@ export default {
     display: grid;
     width: 100%; 
     height: 100%;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     grid-template-rows: auto 3fr;
     grid-template-areas: "a a a" "b c d";
     grid-gap: 15px;

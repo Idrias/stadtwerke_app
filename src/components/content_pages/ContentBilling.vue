@@ -183,7 +183,7 @@
 
         grid-template-areas: "settings bill" "selector bill";        		
 		grid-gap: 1%;
-		grid-template-columns:  25% 75%;
+		grid-template-columns:  1fr 3fr;
         grid-template-rows: auto auto;
     }
 
