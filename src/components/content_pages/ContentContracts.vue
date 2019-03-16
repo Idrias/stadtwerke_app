@@ -1,54 +1,53 @@
 <template>
-
   <ContentWrapper id="contracts" :useInnerBox="true">
-    
     <template #outer>
-      <ButtonBar 
-        v-bind:selectedCategory="selectedCategory" 
-        v-on:categorySelected="handleCategorySelected">
+      <ButtonBar
+        v-bind:selectedCategory="selectedCategory"
+        v-on:categorySelected="handleCategorySelected"
+      >
       </ButtonBar>
     </template>
 
     <template #inner>
       <div id="grid_item">
-      <table v-if="getContracts().length > 0">
-        <tr>
-          <th>Vertragspartner</th>
-          <th>Vertragsnummer</th>
-          <th>Zähler</th>
-          <th>Start</th>
-          <th>Ende</th>
-          <th>Fixkosten</th>
-          <th v-if="selectedCategory.id != 3">Variable Kosten</th>
-          <th v-if="selectedCategory.id == 3">Schmutzwasser</th>
-          <th v-if="selectedCategory.id == 3">Niederschlag</th>
-        </tr>
+        <table v-if="getContracts().length > 0">
+          <tr>
+            <th>Vertragspartner</th>
+            <th>Vertragsnummer</th>
+            <th>Zähler</th>
+            <th>Start</th>
+            <th>Ende</th>
+            <th>Fixkosten</th>
+            <th v-if="selectedCategory.id != 3">Variable Kosten</th>
+            <th v-if="selectedCategory.id == 3">Schmutzwasser</th>
+            <th v-if="selectedCategory.id == 3">Niederschlag</th>
+          </tr>
 
-        <tr
-          v-for="contract in getContracts()"
-          v-bind:key="contract.uuid"
-          v-on:click="updateContract(contract)"
-        >
-          <td>{{ contract.company }}</td>
-          <td>{{ contract.cid }}</td>
-          <td>{{getMeter(contract.m_uuid).mid}}</td>
-          <td>{{ $root.ld(contract.start) }}</td>
-          <td>{{ $root.ld(contract.end) }}</td>
-          <td>{{ contract.costfix }} €/Jahr</td>
-          <td v-if="selectedCategory.id != 3">
-            {{ contract.costvar }} €/{{ selectedCategory.unit }}
-          </td>
-          <td v-if="selectedCategory.id == 3">
-            {{ contract.costvardirty }} €/m³
-          </td>
-          <td v-if="selectedCategory.id == 3">
-            {{ contract.costvarrain }} €/m²
-          </td>
-        </tr>
-      </table>
+          <tr
+            v-for="contract in getContracts()"
+            v-bind:key="contract.uuid"
+            v-on:click="updateContract(contract)"
+          >
+            <td>{{ contract.company }}</td>
+            <td>{{ contract.cid }}</td>
+            <td>{{ getMeter(contract.m_uuid).mid }}</td>
+            <td>{{ $root.ld(contract.start) }}</td>
+            <td>{{ $root.ld(contract.end) }}</td>
+            <td>{{ contract.costfix }} €/Jahr</td>
+            <td v-if="selectedCategory.id != 3">
+              {{ contract.costvar }} €/{{ selectedCategory.unit }}
+            </td>
+            <td v-if="selectedCategory.id == 3">
+              {{ contract.costvardirty }} €/m³
+            </td>
+            <td v-if="selectedCategory.id == 3">
+              {{ contract.costvarrain }} €/m²
+            </td>
+          </tr>
+        </table>
 
-      <p v-else>Noch keine Verträge hinzugefügt.</p>
-      <AddButton v-on:click="addContract()"/>
+        <p v-else>Noch keine Verträge hinzugefügt.</p>
+        <AddButton v-on:click="addContract()" />
       </div>
       <AddContract
         v-on:inputDone="handleNewContract"
@@ -56,9 +55,7 @@
         ref="addContract"
       />
     </template>
-
   </ContentWrapper>
-
 </template>
 
 <script>
@@ -74,7 +71,7 @@ export default {
   components: { AddContract, ButtonBar, ContentWrapper, AddButton },
   data() {
     let el = {
-      ...this.$root.$data.sharedState,
+      ...this.$root.$data.sharedState
     };
     el.selectedCategory = el.categories[0];
     return el;
@@ -128,16 +125,14 @@ export default {
     },
 
     getMeter(m_uuid) {
-      if(m_uuid == "0") return {mid: "(alle)"}
-      for(let meter of this.meters) {
-        if(m_uuid == meter.uuid) return meter;
+      if (m_uuid == "0") return { mid: "(alle)" };
+      for (let meter of this.meters) {
+        if (m_uuid == meter.uuid) return meter;
       }
-      return {mid: "?"};
-      
+      return { mid: "?" };
     }
   }
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

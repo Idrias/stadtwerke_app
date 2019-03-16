@@ -1,31 +1,31 @@
 <template>
   <DialogueWrapper :show="show" :title="title" v-on:close="close">
+    <form v-on:submit.prevent>
+      <!-- Informationen angeben -->
+      <table>
+        <tr>
+          <td>Titel</td>
+          <td>
+            <input class="textinput" type="text" v-model="input.name" />
+          </td>
+        </tr>
+      </table>
 
-      <form v-on:submit.prevent>
+      <br />
+      <p v-if="!changeMode">
+        Tipp: Späteres Bearbeiten der Abrechnung ist mit der rechten Maustaste
+        möglich.
+      </p>
 
-        <!-- Informationen angeben -->
-        <table>
-            <tr>
-                <td>Titel</td>
-                <td>
-                    <input class="textinput" type="text" v-model="input.name"/>
-                </td>
-            </tr>
-        </table>
-
-        <br>        
-        <p v-if="!changeMode">Tipp: Späteres Bearbeiten der Abrechnung ist mit der rechten Maustaste möglich.</p>
-
-        <!-- Buttons -->
-        <div id="buttonBar">
-          <button class="shadow" v-if="changeMode" v-on:click="closeAndDelete()">
-            Löschen
-          </button>
-          <button class="shadow" v-on:click="close()">Abbrechen</button>
-          <button class="shadow" v-on:click="closeAndUpdate()">Speichern</button>
-        </div>
-      </form>
-
+      <!-- Buttons -->
+      <div id="buttonBar">
+        <button class="shadow" v-if="changeMode" v-on:click="closeAndDelete()">
+          Löschen
+        </button>
+        <button class="shadow" v-on:click="close()">Abbrechen</button>
+        <button class="shadow" v-on:click="closeAndUpdate()">Speichern</button>
+      </div>
+    </form>
   </DialogueWrapper>
 </template>
 
@@ -35,7 +35,7 @@ import DialogueWrapper from "./DialogueWrapper.vue";
 
 export default {
   name: "AddBill",
-  components: {DialogueWrapper},
+  components: { DialogueWrapper },
   props: {},
   data() {
     return {
@@ -44,15 +44,14 @@ export default {
       title: "This is the title!",
 
       input: {
-          name: null,
-          uuid: null,
-          date: null,
+        name: null,
+        uuid: null,
+        date: null
       },
-      ...this.$root.$data.sharedState,
+      ...this.$root.$data.sharedState
     };
   },
   methods: {
-
     close() {
       this.show = false;
     },
@@ -67,8 +66,7 @@ export default {
           return;
         }
       }
-      this.bills.push({...this.input});
-
+      this.bills.push({ ...this.input });
     },
 
     closeAndDelete() {
@@ -98,11 +96,9 @@ export default {
       this.changeMode = true;
       Object.assign(this.input, currentVersion);
       this.show = true;
-    },
+    }
   }
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,44 +1,41 @@
 <template>
   <DialogueWrapper :show="show" :title="title" v-on:close="close">
+    <form v-on:submit.prevent>
+      <!-- Zählerinformationen angeben -->
+      <table>
+        <tr>
+          <td>Zählerstand</td>
+          <td>
+            <input class="textinput" type="text" v-model="input.value" />
+          </td>
+        </tr>
 
-      <form v-on:submit.prevent>
+        <tr>
+          <td>Ablesedatum</td>
+          <td>
+            <input class="textinput" type="date" v-model="input.date" />
+          </td>
+        </tr>
 
-        <!-- Zählerinformationen angeben -->
-        <table>
-            <tr>
-                <td>Zählerstand</td>
-                <td>
-                    <input class="textinput" type="text" v-model="input.value" />
-                </td>
-            </tr>
+        <tr>
+          <td>Kommentar</td>
+          <td>
+            <input class="textinput" type="text" v-model="input.comment" />
+          </td>
+        </tr>
+      </table>
 
-            <tr>
-                <td>Ablesedatum</td>
-                <td>
-                    <input class="textinput" type="date" v-model="input.date"/>
-                </td>
-            </tr>
+      <br />
 
-            <tr>
-                <td>Kommentar</td>
-                <td>
-                    <input class="textinput" type="text" v-model="input.comment" />
-                </td>
-            </tr>
-        </table>
-
-        <br>        
-
-        <!-- Buttons -->
-        <div id="buttonBar">
-          <button class="shadow" v-if="changeMode" v-on:click="closeAndDelete()">
-            Löschen
-          </button>
-          <button class="shadow" v-on:click="close()">Abbrechen</button>
-          <button class="shadow" v-on:click="closeAndUpdate()">Speichern</button>
-        </div>
-      </form>
-
+      <!-- Buttons -->
+      <div id="buttonBar">
+        <button class="shadow" v-if="changeMode" v-on:click="closeAndDelete()">
+          Löschen
+        </button>
+        <button class="shadow" v-on:click="close()">Abbrechen</button>
+        <button class="shadow" v-on:click="closeAndUpdate()">Speichern</button>
+      </div>
+    </form>
   </DialogueWrapper>
 </template>
 
@@ -48,7 +45,7 @@ import DialogueWrapper from "./DialogueWrapper.vue";
 
 export default {
   name: "AddReading",
-  components: {DialogueWrapper},
+  components: { DialogueWrapper },
   props: {},
   data() {
     return {
@@ -61,13 +58,12 @@ export default {
         value: null,
         uuid: null,
         comment: null,
-        m_uuid: null,
+        m_uuid: null
       },
-      ...this.$root.$data.sharedState,
+      ...this.$root.$data.sharedState
     };
   },
   methods: {
-
     close() {
       this.show = false;
     },
@@ -81,8 +77,7 @@ export default {
           return;
         }
       }
-      this.readings.push({...this.input});
-
+      this.readings.push({ ...this.input });
     },
 
     closeAndDelete() {
@@ -113,11 +108,9 @@ export default {
       this.changeMode = true;
       Object.assign(this.input, currentVersion);
       this.show = true;
-    },
+    }
   }
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

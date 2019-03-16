@@ -1,16 +1,13 @@
 <template>
   <div id="darkOverlay" v-if="show" v-on:click="$emit('close')">
     <div id="dialogueWindow" class="shadow" v-on:click.stop>
-      
-      <h2 v-if="title" id="title"> {{title}} </h2>
+      <h2 v-if="title" id="title">{{ title }}</h2>
       <slot></slot>
-
     </div>
   </div>
 </template>
 
 <script>
-
 export default {
   name: "DialogueWrapper",
 
@@ -20,13 +17,10 @@ export default {
   },
 
   data() {
-    return {
-      
-    }
+    return {};
   },
 
-  methods: {
-  }
+  methods: {}
 };
 </script>
 
@@ -54,8 +48,6 @@ export default {
   overflow-y: auto;
 }
 
-
-
 input {
   background-color: var(--c4);
   border: none;
@@ -64,9 +56,8 @@ input {
 table {
   margin: 0px auto;
   width: 70%;
-  
 }
-  
+
 button {
   width: 30%;
   height: 30px;
@@ -90,11 +81,15 @@ td {
   height: 40px;
 }
 
-tr,td,th {
+tr,
+td,
+th {
   border-bottom: none;
 }
 
-tr:hover,td:hover,th:hover {
+tr:hover,
+td:hover,
+th:hover {
   background-color: var(--c3);
   cursor: auto;
 }
@@ -132,5 +127,4 @@ select {
 select::-ms-expand {
   display: none;
 }
-
 </style>

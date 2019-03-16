@@ -38,8 +38,8 @@ export default {
   --c3: #36393e; /*#263244;*/
   --c4: #424549;
 
-  --cm14:#2F3237;
-  --cm34:#3C3F44;
+  --cm14: #2f3237;
+  --cm34: #3c3f44;
 
   --c2high: #ddeaea;
   --c2hover: #a8bae2;

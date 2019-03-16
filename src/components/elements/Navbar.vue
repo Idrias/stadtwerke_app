@@ -11,12 +11,10 @@
     >
       {{ button.name }}
     </div>
-
   </div>
 </template>
 
 <script>
-
 export default {
   name: "Navbar",
   props: {},
@@ -82,14 +80,12 @@ export default {
   background-color: var(--c4) !important;
   color: white;
 
-    border-style: none none none solid;
+  border-style: none none none solid;
   border-width: medium;
   border-color: var(--c2);
 }
 
 .fa-cogs {
-
   color: darkgray;
 }
-
 </style>

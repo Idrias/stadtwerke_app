@@ -1,79 +1,83 @@
 <template>
   <DialogueWrapper :show="show" :title="title" v-on:close="close">
+    <form v-on:submit.prevent>
+      <!-- Zählerart festlegen -->
+      <p>Zählerart</p>
+      <table>
+        <tr>
+          <td class="radiotd">
+            <input
+              type="radio"
+              class="radio"
+              name="kind"
+              v-model.number="input.category"
+              value="0"
+              checked
+            /><br />
+            Strom
+          </td>
+          <td class="radiotd">
+            <input
+              type="radio"
+              class="radio"
+              name="kind"
+              v-model.number="input.category"
+              value="1"
+            /><br />
+            Gas
+          </td>
+          <td class="radiotd">
+            <input
+              type="radio"
+              class="radio"
+              name="kind"
+              v-model.number="input.category"
+              value="2"
+            /><br />
+            Wasser
+          </td>
+        </tr>
+      </table>
 
-      <form v-on:submit.prevent>
+      <br />
 
-        <!-- Zählerart festlegen -->
-        <p>Zählerart</p>
-        <table>
-          <tr>
-            <td class="radiotd">
-              <input
-                type="radio" class="radio"
-                name="kind"
-                v-model.number="input.category"
-                value="0"
-                checked
-              /><br />
-              Strom
-            </td>
-            <td class="radiotd">
-              <input
-                type="radio" class="radio"
-                name="kind"
-                v-model.number="input.category"
-                value="1"
-              /><br />
-              Gas
-            </td>
-            <td class="radiotd">
-              <input
-                type="radio" class="radio"
-                name="kind"
-                v-model.number="input.category"
-                value="2"
-              /><br />
-              Wasser
-            </td>
-          </tr>
-        </table>
+      <!-- Zählerinformationen angeben -->
+      <table>
+        <tr>
+          <td>Zählernummer</td>
+          <td>
+            <input class="textinput" type="text" v-model="input.mid" />
+          </td>
+        </tr>
 
-        <br>
+        <tr>
+          <td>Kommentar</td>
+          <td>
+            <input class="textinput" type="text" v-model="input.comment" />
+          </td>
+        </tr>
 
-        <!-- Zählerinformationen angeben -->
-        <table>
-          <tr>
-            <td>Zählernummer</td>
-            <td>
-              <input class="textinput" type="text" v-model="input.mid" />
-            </td>
-          </tr>
+        <tr v-if="input.category == 2">
+          <td>Verursacht Abwasser</td>
+          <td><input type="checkbox" v-model="input.producesDirtyWater" /></td>
+        </tr>
+      </table>
 
-          <tr>
-            <td>Kommentar</td>
-            <td><input class="textinput" type="text" v-model="input.comment" /></td>
-          </tr>
+      <br />
+      <p v-if="!changeMode">
+        Tipp: Späteres Bearbeiten des Zählers ist mit der rechten Maustaste
+        möglich.
+      </p>
 
-          <tr v-if="input.category == 2">
-            <td>Verursacht Abwasser</td>
-            <td><input type="checkbox" v-model="input.producesDirtyWater"/></td>
-          </tr>
-        </table>
-
-        <br>
-        <p v-if="!changeMode">Tipp: Späteres Bearbeiten des Zählers ist mit der rechten Maustaste möglich.</p>
-        
-
-        <!-- Buttons -->
-        <div id="buttonBar">
-          <button class="shadow" v-if="changeMode" v-on:click="closeAndDelete()">
-            Löschen
-          </button>
-          <button class="shadow" v-on:click="close()">Abbrechen</button>
-          <button class="shadow" v-on:click="closeAndUpdate()">Speichern</button>
-        </div>
-      </form>
-
+      <!-- Buttons -->
+      <div id="buttonBar">
+        <button class="shadow" v-if="changeMode" v-on:click="closeAndDelete()">
+          Löschen
+        </button>
+        <button class="shadow" v-on:click="close()">Abbrechen</button>
+        <button class="shadow" v-on:click="closeAndUpdate()">Speichern</button>
+      </div>
+    </form>
   </DialogueWrapper>
 </template>
 
@@ -83,7 +87,7 @@ import DialogueWrapper from "./DialogueWrapper.vue";
 
 export default {
   name: "AddMeter",
-  components: {DialogueWrapper},
+  components: { DialogueWrapper },
   props: {},
   data() {
     return {
@@ -97,13 +101,12 @@ export default {
         uuid: null,
         comment: null,
         producesDirtyWater: true,
-        shares: {},
+        shares: {}
       },
-      ...this.$root.$data.sharedState,
+      ...this.$root.$data.sharedState
     };
   },
   methods: {
-
     close() {
       this.show = false;
     },
@@ -111,7 +114,7 @@ export default {
     closeAndUpdate() {
       this.close();
 
-      if(this.input.category != 2) this.input.producesDirtyWater = false;
+      if (this.input.category != 2) this.input.producesDirtyWater = false;
 
       for (let index in this.meters) {
         if (this.meters[index].uuid == this.input.uuid) {
@@ -119,17 +122,21 @@ export default {
           let uuid_new = uuidv1();
           this.input.uuid = uuid_new;
 
-          this.readings.forEach(reading => {if(reading.m_uuid == uuid_old) reading.m_uuid = uuid_new});
+          this.readings.forEach(reading => {
+            if (reading.m_uuid == uuid_old) reading.m_uuid = uuid_new;
+          });
 
           this.$set(this.meters, index, { ...this.input });
-          this.$emit("meterChanged", {uuid_old: uuid_old, uuid_new: uuid_new});
+          this.$emit("meterChanged", {
+            uuid_old: uuid_old,
+            uuid_new: uuid_new
+          });
 
           return;
         }
       }
-      
-      this.meters.push({...this.input});
-      
+
+      this.meters.push({ ...this.input });
     },
 
     closeAndDelete() {
@@ -162,11 +169,9 @@ export default {
       this.changeMode = true;
       Object.assign(this.input, currentVersion);
       this.show = true;
-    },
+    }
   }
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,30 +1,27 @@
 <template>
   <DialogueWrapper :show="show" :title="title" v-on:close="close">
+    <form v-on:submit.prevent>
+      <!-- Informationen angeben -->
+      <table>
+        <tr>
+          <td>Name</td>
+          <td>
+            <input class="textinput" type="text" v-model="input.name" />
+          </td>
+        </tr>
+      </table>
 
-      <form v-on:submit.prevent>
+      <br />
 
-        <!-- Informationen angeben -->
-        <table>
-            <tr>
-                <td>Name</td>
-                <td>
-                    <input class="textinput" type="text" v-model="input.name" />
-                </td>
-            </tr>
-        </table>
-
-        <br>        
-
-        <!-- Buttons -->
-        <div id="buttonBar">
-          <button class="shadow" v-if="changeMode" v-on:click="closeAndDelete()">
-            Löschen
-          </button>
-          <button class="shadow" v-on:click="close()">Abbrechen</button>
-          <button class="shadow" v-on:click="closeAndUpdate()">Speichern</button>
-        </div>
-      </form>
-
+      <!-- Buttons -->
+      <div id="buttonBar">
+        <button class="shadow" v-if="changeMode" v-on:click="closeAndDelete()">
+          Löschen
+        </button>
+        <button class="shadow" v-on:click="close()">Abbrechen</button>
+        <button class="shadow" v-on:click="closeAndUpdate()">Speichern</button>
+      </div>
+    </form>
   </DialogueWrapper>
 </template>
 
@@ -34,7 +31,7 @@ import DialogueWrapper from "./DialogueWrapper.vue";
 
 export default {
   name: "AddParty",
-  components: {DialogueWrapper},
+  components: { DialogueWrapper },
   props: {},
   data() {
     return {
@@ -43,14 +40,13 @@ export default {
       title: "This is the title!",
 
       input: {
-          name: null,
-          uuid: null,
+        name: null,
+        uuid: null
       },
-      ...this.$root.$data.sharedState,
+      ...this.$root.$data.sharedState
     };
   },
   methods: {
-
     close() {
       this.show = false;
     },
@@ -64,8 +60,7 @@ export default {
           return;
         }
       }
-      this.parties.push({...this.input});
-
+      this.parties.push({ ...this.input });
     },
 
     closeAndDelete() {
@@ -96,11 +91,9 @@ export default {
       this.changeMode = true;
       Object.assign(this.input, currentVersion);
       this.show = true;
-    },
+    }
   }
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

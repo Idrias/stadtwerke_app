@@ -4,6 +4,10 @@ import router from "./router";
 const electron = require("electron");
 Vue.config.productionTip = false;
 
+import VueChartkick from 'vue-chartkick'
+import Chart from 'chart.js'
+Vue.use(VueChartkick, {adapter: Chart})
+
 let vue = new Vue({
   render: h => h(App),
   router,
@@ -14,72 +18,72 @@ let vue = new Vue({
         name: "Dark Theme",
         inUse: true,
         colors: [
-          {name: "c0", value: "#1e2124"},
-          {name: "c1", value: "#282b30"},
-          {name: "c2", value: "#7289da"},
-          {name: "c3", value: "#36393e"},
-          {name: "c4", value: "#424549"},
-          {name: "cm14", value: "#2F3237"},
-          {name: "cm34", value: "#3C3F44"},
-          {name: "c2high", value: "#ddeaea"},
-          {name: "c2hover", value: "#a8bae2"},
-          {name: "ct0", value: "#2c3e50"},
-          {name: "ct1", value: "lightgray"},
+          { name: "c0", value: "#1e2124" },
+          { name: "c1", value: "#282b30" },
+          { name: "c2", value: "#7289da" },
+          { name: "c3", value: "#36393e" },
+          { name: "c4", value: "#424549" },
+          { name: "cm14", value: "#2F3237" },
+          { name: "cm34", value: "#3C3F44" },
+          { name: "c2high", value: "#ddeaea" },
+          { name: "c2hover", value: "#a8bae2" },
+          { name: "ct0", value: "#2c3e50" },
+          { name: "ct1", value: "lightgray" }
         ]
       },
       {
         name: "Light Theme",
         inUse: false,
         colors: [
-          {name: "c0", value: "#1e2124"},
-          {name: "c1", value: "#282b30"},
-          {name: "c2", value: "red"},
-          {name: "c3", value: "#36393e"},
-          {name: "c4", value: "#424549"},
-          {name: "cm14", value: "#2F3237"},
-          {name: "cm34", value: "#3C3F44"},
-          {name: "c2high", value: "#ddeaea"},
-          {name: "c2hover", value: "#a8bae2"},
-          {name: "ct0", value: "#2c3e50"},
-          {name: "ct1", value: "lightgray"},
+          { name: "c0", value: "#1e2124" },
+          { name: "c1", value: "#282b30" },
+          { name: "c2", value: "red" },
+          { name: "c3", value: "#36393e" },
+          { name: "c4", value: "#424549" },
+          { name: "cm14", value: "#2F3237" },
+          { name: "cm34", value: "#3C3F44" },
+          { name: "c2high", value: "#ddeaea" },
+          { name: "c2hover", value: "#a8bae2" },
+          { name: "ct0", value: "#2c3e50" },
+          { name: "ct1", value: "lightgray" }
         ]
       }
-    ],
+    ]
   },
 
   methods: {
     cycleTheme() {
-      for(let i in this.colorThemes) {
+      for (let i in this.colorThemes) {
         i = parseInt(i);
 
-        if(this.colorThemes[i].inUse === true) {
+        if (this.colorThemes[i].inUse === true) {
           this.colorThemes[i].inUse = false;
-          let nextIndex = (i+1)%this.colorThemes.length;
+          let nextIndex = (i + 1) % this.colorThemes.length;
           let nextTheme = this.colorThemes[nextIndex];
 
           nextTheme.inUse = true;
-          for(let color of nextTheme.colors) {
-            document.documentElement.style.setProperty('--'+color.name, color.value);
-          };
+          for (let color of nextTheme.colors) {
+            document.documentElement.style.setProperty(
+              "--" + color.name,
+              color.value
+            );
+          }
           return;
         }
       }
     },
 
     ld(date, locale) {
-      if(locale)
-        return new Date(date).toLocaleDateString(locale)
-      else 
-        return new Date(date).toLocaleDateString("de-de")
+      if (locale) return new Date(date).toLocaleDateString(locale);
+      else return new Date(date).toLocaleDateString("de-de");
     }
   },
 
-  created: function () {
-    console.log("Root Vue instance created. Now reading data.")
-    let stateString = window.localStorage.getItem("applicationState")
+  created: function() {
+    console.log("Root Vue instance created. Now reading data.");
+    let stateString = window.localStorage.getItem("applicationState");
 
-    if (stateString != "null")
-      this.sharedState = JSON.parse(stateString);
+    if (stateString != "null") this.sharedState = JSON.parse(stateString);
 
     if (stateString == "null" || this.sharedState == {})
       this.sharedState = {
@@ -93,19 +97,20 @@ let vue = new Vue({
         meters: [],
         readings: [],
         parties: [],
-        bills: [],
+        bills: []
       };
-
   },
-
 
   watch: {
     sharedState: {
       handler(val) {
-        console.log("Shared application state changed. Writing to file.")
-        window.localStorage.setItem("applicationState", JSON.stringify(this.sharedState));
+        console.log("Shared application state changed. Writing to file.");
+        window.localStorage.setItem(
+          "applicationState",
+          JSON.stringify(this.sharedState)
+        );
       },
-      deep: true,
+      deep: true
     }
   }
 }).$mount("#app");
