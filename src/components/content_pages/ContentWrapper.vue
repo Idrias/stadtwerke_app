@@ -30,4 +30,10 @@
     padding: 3%;
     overflow: auto;
   }
+
+  input {
+      color: var(--c2);
+      background: var(--c3);
+      border: none;
+  }
 </style>

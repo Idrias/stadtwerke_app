@@ -64,13 +64,19 @@ let vue = new Vue({
           return;
         }
       }
+    },
+
+    ld(date, locale) {
+      if(locale)
+        return new Date(date).toLocaleDateString(locale)
+      else 
+        return new Date(date).toLocaleDateString("de-de")
     }
   },
 
   created: function () {
     console.log("Root Vue instance created. Now reading data.")
     let stateString = window.localStorage.getItem("applicationState")
-    console.log(stateString);
 
     if (stateString != "null")
       this.sharedState = JSON.parse(stateString);
@@ -85,10 +91,10 @@ let vue = new Vue({
         ],
         contracts: [],
         meters: [],
-        readings: []
+        readings: [],
+        parties: [],
+        bills: [],
       };
-
-    console.log(this.sharedState);
 
   },
 
@@ -103,7 +109,3 @@ let vue = new Vue({
     }
   }
 }).$mount("#app");
-
-window.exportJson = function () {
-  console.log(JSON.stringify(vue.$data));
-}

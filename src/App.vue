@@ -60,6 +60,7 @@ export default {
   width: 85%;
   height: 100%;
   float: left;
+  overflow: auto;
 }
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
@@ -75,6 +76,7 @@ export default {
 
 #main {
   flex: 1;
+  overflow: auto;
 }
 
 .shadow {

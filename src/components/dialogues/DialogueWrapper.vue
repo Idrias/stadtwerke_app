@@ -66,18 +66,23 @@ table {
   width: 70%;
   
 }
-
+  
 button {
-  background-color: var(--c2);
-  border: 0;
   width: 30%;
   height: 30px;
   margin: 8px;
+  background: var(--c4);
+  border: 1px solid var(--c2);
+  color: var(--ct1);
 }
 
 button:hover {
-  background-color: var(--c2hover);
   cursor: pointer;
+  border: 1px solid var(--c2high);
+}
+
+button:focus {
+  outline: 0;
 }
 
 tr,

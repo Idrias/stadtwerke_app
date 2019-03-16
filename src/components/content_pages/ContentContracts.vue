@@ -32,8 +32,8 @@
           <td>{{ contract.company }}</td>
           <td>{{ contract.cid }}</td>
           <td>{{getMeter(contract.m_uuid).mid}}</td>
-          <td>{{ contract.start }}</td>
-          <td>{{ contract.end }}</td>
+          <td>{{ $root.ld(contract.start) }}</td>
+          <td>{{ $root.ld(contract.end) }}</td>
           <td>{{ contract.costfix }} €/Jahr</td>
           <td v-if="selectedCategory.id != 3">
             {{ contract.costvar }} €/{{ selectedCategory.unit }}
@@ -95,12 +95,10 @@ export default {
     /* Communication with "New Contract" window */
 
     addContract() {
-      console.log("Adding..")
       this.$refs.addContract.openNewContract(this.selectedCategory.id);
     },
 
     updateContract(contract) {
-      console.log(this.$refs);
       this.$refs.addContract.openForChange(contract);
     },
 

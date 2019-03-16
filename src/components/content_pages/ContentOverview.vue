@@ -8,7 +8,7 @@
           <div id="greetingContainer" class="gridContent shadow">
             <h2>
               {{getGreeting()}} <br>
-              Wie kann ich Ihnen heute behilflich sein?
+              {{getQuestion()}}
             </h2>
           </div>
 
@@ -28,7 +28,7 @@
                 <td>{{contract.catName}}
                 <td>{{contract.company}}</td>
                 <td>{{contract.cid}}</td>
-                <td>{{contract.start}}</td>
+                <td>{{$root.ld(contract.start)}}</td>
               </tr>
             </table>
 
@@ -70,6 +70,11 @@ export default {
       if(hours >= 12 && hours < 18) return "Guten Tag.";
       if(hours >= 18 || hours < 3) return "Guten Abend.";
       return "Hallo.";
+    },
+
+    getQuestion() {
+      let questions = ["Was gibt es heute zu tun?", "Was möchten Sie heute erledigen?", "Wie kann ich Ihnen heute behilflich sein?", "Viel Vergnügen bei der Nutzung der App!", "Was steht heute an?"];
+      return questions[parseInt(Math.random()*questions.length)];
     },
 
     getActiveContracts() {
@@ -120,11 +125,6 @@ export default {
 
   #options {
     grid-area: d;
-  }
-
-  h2 {
-    padding-top: 1%;
-    padding-bottom: 5%;
   }
   
   button {

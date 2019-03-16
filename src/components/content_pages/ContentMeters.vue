@@ -55,7 +55,7 @@
 								v-bind:key="reading.uuid"
 								v-on:click="$refs.addReading.openForChange(reading)"
 							>
-								<td>{{reading.date}}</td>
+								<td>{{$root.ld(reading.date)}}</td>
 								<td>{{reading.value}}</td>
 								<td>{{reading.comment}}</td>
 							</tr>
@@ -110,7 +110,6 @@
 			},
 
 			handleMeterDeleted(uuid) {
-				console.log("look");
 				if (uuid == this.selectedMeter.uuid) this.selectedMeter = null;
 			},
 
@@ -145,7 +144,6 @@
 			},
 
 			selectMeter(meter) {
-				console.log("Selecting " + meter);
 				this.selectedMeter = meter;
 			},
 
@@ -200,7 +198,6 @@
 		width: 100%;
 		color: var(--ct1);
 
-		overflow: auto;
 		display: grid;
 
 		grid-template-rows: auto;

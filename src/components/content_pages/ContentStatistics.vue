@@ -52,8 +52,6 @@ export default {
   },
 
   mounted() {
-    console.log("HEY")
-    console.log(this);
     var myChart = new Chart(this.$refs.chartCanvas.getContext("2d"), {
     type: 'line',
     data: {

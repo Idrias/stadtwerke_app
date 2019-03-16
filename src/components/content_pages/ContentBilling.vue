@@ -6,50 +6,90 @@
                 
                 <div id="billSelectContainer" class="container shadow">
                     <h2> Abrechnungsauswahl </h2>
+                    <br>
+                    <table v-if="bills.length > 0">
+                        <tr>
+                            <th>Titel</th>          
+                            <th>Erstellt</th> 
+                        </tr>
+                        
+                        <tr v-for="bill in bills" 
+                            v-bind:key="bill.uuid"
+                            @contextmenu="$refs.addBill.openForChange(bill)"
+                            v-on:click="selectedBill = bill"
+                            v-bind:class="{selected: selectedBill === bill}"
+                        >
+                            <td>{{bill.name}}</td>  
+                            <td>{{$root.ld(bill.date)}}</td>   
+                        </tr>
+                    </table>
+                    <p v-else>Noch keine Abrechnung hinzugefügt.</p>
+
+                    <AddButton v-on:click="$refs.addBill.openNewBill()"/>
+                    <AddBill ref="addBill"/>
+
+                    
                 </div>
+                
 
                 <div id="billContainer" class="container shadow">
                     <h2> Abrechnung </h2>
-                    <p> Zeitraum: {{input.start}} - {{input.end}}</p>
-                    <p> ({{getBillingDuration()}} Tage) </p>
 
-                    <table>
-                        <tr>
-                            <td></td>
-                            <td> Vertrag </td>
-                            <td> Fixkosten </td>
-                            <td> Variable Kosten </td>
-                            <td> Gesamte Kosten </td>
-                        </tr>
+                    <div v-if="selectedBill">
+                        <p> Zeitraum: {{selectedBill.start}} - {{selectedBill.end}}</p>
+                        <p> ({{getBillingDuration()}} Tage) </p>
 
-                        <tr v-for="(contract, index) of getAllData()" v-bind:key="index" v-bind:class="{noBorder: contract.categoryName != null}">
-                            <td> {{contract.categoryName}} </td>
-                            <td> {{contract.contract.cid}} <br> (Zähler {{contract.meter.mid}})</td>
-                            <td> {{contract.fixCostPartial}} €</td>
-                            <td> {{contract.estimatedVariableCost}} € <br> ({{contract.estimatedConsumption}} {{contract.unit}}) </td>
-                            <td> {{contract.costTotal}} €</td>
-                        </tr>
-                    </table>
+                        <table>
+                            <tr>
+                                <td></td>
+                                <td> Vertrag </td>
+                                <td> Fixkosten </td>
+                                <td> Variable Kosten </td>
+                                <td> Gesamte Kosten </td>
+                            </tr>
 
-                    <h3> Gesamt </h3>
+                            <tr v-for="(contract, index) of getAllData()" v-bind:key="index" v-bind:class="{limitBorder: contract.categoryName != null}">
+                                <td> {{contract.categoryName}} </td>
+                                <td> {{contract.contract.cid}} <br> (Zähler {{contract.meter.mid}})</td>
+                                <td> {{contract.fixCostPartial}} €</td>
+                                <td> {{contract.estimatedVariableCost}} € <br> ({{contract.estimatedConsumption}} {{contract.unit}}) </td>
+                                <td> {{contract.costTotal}} €</td>
+                            </tr>
+                        </table>
+
+                        <h3> Gesamt </h3>
+                    </div>
+                    <p v-else><br>Bitte zunächst Abrechnung auswählen.</p>
                 </div>
 
                 <div id="settingsContainer" class="container shadow">
                     <h2> Einstellungen </h2>
+                    <br>
 
-                    <form v-on:submit.prevent>
-                        Abrechnungszeitraum
+                    <form v-on:submit.prevent v-if="selectedBill">
                         <table>
+                            <tr><th class="noBorder" colspan=2>Abrechnungszeitraum</th></tr>
                             <tr>
                                 <td>Start</td>
-                                <td><input class="textinput" type="date" v-model="input.start" /></td>
+                                <td v-if="!selectedBill.locked"><input class="textinput" type="date" v-model="selectedBill.start" /></td>
+                                <td v-else>{{selectedBill.start}}</td>
                             </tr>
                             <tr>
                                 <td>Ende</td>
-                                <td><input class="textinput" type="date" v-model="input.end" /></td>
+                                <td v-if="!selectedBill.locked"><input class="textinput" type="date" v-model="selectedBill.end" /></td>
+                                <td v-else>{{selectedBill.end}}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Abrechnung einfrieren</td>
+                                <td><input type="checkbox" v-model="selectedBill.locked"/></td>
                             </tr>
                         </table>
-                    </form> 
+
+                        <p v-if="selectedBill.locked">Abrechnung eingefroren: Eingaben und berechnete Were fix!</p>
+                    </form>
+
+                    <p v-else>Bitte zunächst Abrechnung auswählen.</p>
                 </div>
 
             </div>
@@ -60,25 +100,24 @@
 
 <script>
     import ContentWrapper from "./ContentWrapper.vue";
+    import AddButton from "../elements/AddButton.vue";
+    import AddBill from "../dialogues/AddBill.vue";
 
 	export default {
 		name: "ContentBilling",
 		props: {},
-		components: { ContentWrapper },
+		components: { ContentWrapper, AddButton, AddBill },
 		data() {
 			let el = {
                 ...this.$root.$data.sharedState,
-                input: {
-                    end: new Date().toISOString().slice(0,10),
-                    start: new Date((new Date()-(365*24*60*60*1000))).toISOString().slice(0,10),
-                },
+                selectedBill: null,
             };
 			return el;
         },
+        mounted() {
+            if(this.bills.length > 0) this.selectedBill = this.bills[this.bills.length-1];
+        },
         computed: {
-            currentBill() {
-                
-            }
         },
 		methods: {
             
@@ -87,27 +126,26 @@
             },
 
             getBillingDuration() {
-                return (new Date(this.input.end)- new Date(this.input.start)) / (60*60*24*1000);
+                return (new Date(this.selectedBill.end) - new Date(this.selectedBill.start)) / (60*60*24*1000) + 1;
             },
 
             getAllData() {
-                console.log("executed 2");
+                if(this.selectedBill.locked) return this.selectedBill.data;
                 let data = []
                 for(let category of this.categories) {
-                    console.log(category);
                     let newData = this.getData(category.id);
                     if(newData.length > 0) newData[0].categoryName = category.name;
                     data = [...data, ...newData];
                 }
-                console.log(data);
+                this.selectedBill.data = data;
                 return data;
             },
 
             getData(category){
-                console.log("executed")
                 let contracts = []
-                let billingStart =  new Date(this.input.start);
-                let billingEnd = new Date(this.input.end);
+                let billingStart =  new Date(this.selectedBill.start);
+                let billingEnd = new Date(this.selectedBill.end);
+                billingEnd.setDate(billingEnd.getDate()+1); //TODO
 
                 /* Get all contracts of category */ 
                 /* Sort by beginDate & Filter: only contracts with start before billingEnd and end after billingStart */
@@ -139,7 +177,6 @@
                     let firstReading = readings[0];
                     let lastReading = readings[readings.length-1];
                     let avgConsumption = (lastReading.value-firstReading.value) / ( new Date(lastReading.date) - new Date(firstReading.date) );
-                    console.log(contract.costvar + " " + "?");
                     // Get estimated consumption
                     let estimatedConsumption = activeTime * avgConsumption;
 
@@ -165,7 +202,6 @@
                     )
                 }
 
-                console.log(contracts);
                 return contracts;
 
             },
@@ -217,8 +253,21 @@
         border: none;
     }
 
-    .noBorder {
+    .limitBorder {
         border-top: solid 1px;
+    }
+
+    .noBorder {
+        border: none;
+    }
+
+    th {
+        padding: 0;
+        margin: 0;
+    }
+
+    .selected {
+        background: var(--c3) !important;
     }
 
 

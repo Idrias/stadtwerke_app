@@ -35,15 +35,6 @@
               /><br />
               Wasser
             </td>
-            <td class="radiotd">
-              <input
-                type="radio" class="radio"
-                name="kind"
-                v-model.number="input.category"
-                value="3"
-              /><br />
-              Abwasser
-            </td>
           </tr>
         </table>
 
@@ -106,6 +97,7 @@ export default {
         uuid: null,
         comment: null,
         producesDirtyWater: true,
+        shares: {},
       },
       ...this.$root.$data.sharedState,
     };
@@ -161,6 +153,7 @@ export default {
       this.input.category = defaultRadio;
       this.input.uuid = uuidv1();
       this.input.producesDirtyWater = true;
+      this.input.shares = {};
       this.show = true;
     },
 
