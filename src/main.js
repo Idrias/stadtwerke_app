@@ -66,7 +66,8 @@ let vue = new Vue({
 
     if (stateString != "null") this.sharedState = JSON.parse(stateString);
 
-    if (stateString == "null" || this.sharedState == {})
+    console.log(stateString);
+    if (stateString == "null" || !stateString || this.sharedState == {})
       this.resetShared();
 
     this.applyTheme(colorThemes[this.sharedState.activeThemeIndex]);
