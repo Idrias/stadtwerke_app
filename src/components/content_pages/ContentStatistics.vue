@@ -40,17 +40,24 @@
           <br />
 
           <p v-if="!selectedMeter">Bitte zunächst einen Zähler auswählen.</p>
-          
+
           <div v-else>
             <div class="chartContainer">
-                <statistics-chart :selectedMeter="selectedMeter" :displayConsumption="true" :displayCost="false"></statistics-chart>
+              <statistics-chart
+                :selectedMeter="selectedMeter"
+                :displayConsumption="true"
+                :displayCost="false"
+              ></statistics-chart>
             </div>
-            <br>
+            <br />
             <div class="chartContainer" v-if="false">
-                <statistics-chart :selectedMeter="selectedMeter" :displayConsumption="false" :displayCost="true"></statistics-chart>
+              <statistics-chart
+                :selectedMeter="selectedMeter"
+                :displayConsumption="false"
+                :displayCost="true"
+              ></statistics-chart>
             </div>
           </div>
-
         </div>
       </div>
     </template>
@@ -60,9 +67,6 @@
 <script>
 import ButtonBar from "../elements/ButtonBar.vue";
 import ContentWrapper from "./ContentWrapper.vue";
-import AddButton from "../elements/AddButton.vue";
-import AddMeter from "../dialogues/AddMeter.vue";
-import AddReading from "../dialogues/AddReading.vue";
 import StatisticsChart from "../elements/LineChart.js";
 
 export default {
@@ -71,9 +75,6 @@ export default {
   components: {
     ButtonBar,
     ContentWrapper,
-    AddButton,
-    AddMeter,
-    AddReading,
     StatisticsChart
   },
   data() {
@@ -86,7 +87,9 @@ export default {
   },
 
   mounted() {
-    this.selectedMeter = this.meters.find(m => m.category == this.selectedCategory.id);
+    this.selectedMeter = this.meters.find(
+      m => m.category == this.selectedCategory.id
+    );
   },
 
   methods: {

@@ -108,14 +108,14 @@ export default {
 #partyCreator {
   grid-area: a;
   background: var(--c4);
-  padding: 3%;
+  padding: 30px;
   color: var(--ct1);
 }
 
 #partyDistributor {
   grid-area: b;
   background: var(--c4);
-  padding: 3%;
+  padding: 30px;
   color: var(--ct1);
 }
 

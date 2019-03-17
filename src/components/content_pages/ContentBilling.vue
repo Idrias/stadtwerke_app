@@ -4,7 +4,7 @@
       <div id="gridContainer">
         <div id="billSelectContainer" class="container shadow">
           <h2>Abrechnungsauswahl</h2>
-          <br>
+          <br />
           <table v-if="bills.length > 0">
             <tr>
               <th>Titel</th>
@@ -25,8 +25,8 @@
 
           <p v-else>Noch keine Abrechnung hinzugefügt.</p>
 
-          <AddButton v-on:click="$refs.addBill.openNewBill()"/>
-          <AddBill ref="addBill"/>
+          <AddButton v-on:click="$refs.addBill.openNewBill()" />
+          <AddBill ref="addBill" />
         </div>
 
         <div id="billContainer" class="container shadow">
@@ -36,7 +36,7 @@
             <div v-if="getAllData() && getAllData().length > 0">
               <p>Zeitraum: {{ selectedBill.start }} - {{ selectedBill.end }}</p>
               <p>({{ getBillingDuration() }} Tage)</p>
-              <br>
+              <br />
 
               <table>
                 <tr>
@@ -55,44 +55,44 @@
                   <td>{{ contract.categoryName }}</td>
                   <td>
                     {{ contract.contract.cid }}
-                    <br>
+                    <br />
                     (Zähler {{ contract.meter.mid }})
                   </td>
                   <td>{{ contract.fixCostPartial }} €</td>
                   <td>
                     {{ contract.estimatedVariableCost }} €
-                    <br>
+                    <br />
                     ({{ contract.estimatedConsumption }} {{ contract.unit }})
                   </td>
                   <td>
                     {{ contract.costTotal }} €
-                    <br>
-                    {{partyByUuid(selectedBill.party).name}}: {{(contract.costTotal*contract.partyShare).toFixed(2)}}€ ({{contract.partyShare*100}}%)
+                    <br />
+                    {{ partyByUuid(selectedBill.party).name }}:
+                    {{ (contract.costTotal * contract.partyShare).toFixed(2) }}€
+                    ({{ contract.partyShare * 100 }}%)
                   </td>
                 </tr>
               </table>
 
               <h3>
-                {{getSum(getAllData())}}
-                <br>
-                {{getSumParty(getAllData())}}
+                {{ getSum(getAllData()) }}
+                <br />
+                {{ getSumParty(getAllData()) }}
               </h3>
             </div>
           </div>
-          <p v-else>
-            <br>Bitte zunächst Abrechnung auswählen.
-          </p>
+          <p v-else><br />Bitte zunächst Abrechnung auswählen.</p>
 
-          <br>
-          <div v-for="(error,index) of getErrors()" v-bind:key="index">
-            <p style="color: var(--c2)">{{error}}</p>
-            <br>
+          <br />
+          <div v-for="(error, index) of getErrors()" v-bind:key="index">
+            <p style="color: var(--c2)">{{ error }}</p>
+            <br />
           </div>
         </div>
 
         <div id="settingsContainer" class="container shadow">
           <h2>Einstellungen</h2>
-          <br>
+          <br />
 
           <form v-on:submit.prevent v-if="selectedBill">
             <table>
@@ -102,14 +102,22 @@
               <tr>
                 <td>Start</td>
                 <td v-if="!selectedBill.locked">
-                  <input class="textinput" type="date" v-model="selectedBill.start">
+                  <input
+                    class="textinput"
+                    type="date"
+                    v-model="selectedBill.start"
+                  />
                 </td>
                 <td v-else>{{ $root.ld(selectedBill.start) }}</td>
               </tr>
               <tr>
                 <td>Ende</td>
                 <td v-if="!selectedBill.locked">
-                  <input class="textinput" type="date" v-model="selectedBill.end">
+                  <input
+                    class="textinput"
+                    type="date"
+                    v-model="selectedBill.end"
+                  />
                 </td>
                 <td v-else>{{ $root.ld(selectedBill.end) }}</td>
               </tr>
@@ -122,22 +130,31 @@
                       v-for="party of parties"
                       v-bind:key="party.uuid"
                       v-bind:value="party.uuid"
-                    >{{party.name}}</option>
+                      >{{ party.name }}</option
+                    >
                     <option value="alle">Alle</option>
                   </select>
                 </td>
-                <td v-else>{{ partyByUuid(selectedBill.party) ? partyByUuid(selectedBill.party).name : "Unbekannt" }}</td>
+                <td v-else>
+                  {{
+                    partyByUuid(selectedBill.party)
+                      ? partyByUuid(selectedBill.party).name
+                      : "Unbekannt"
+                  }}
+                </td>
               </tr>
 
               <tr>
                 <td>Abrechnung einfrieren</td>
                 <td>
-                  <input type="checkbox" v-model="selectedBill.locked">
+                  <input type="checkbox" v-model="selectedBill.locked" />
                 </td>
               </tr>
             </table>
 
-            <p v-if="selectedBill.locked">Abrechnung eingefroren: Eingaben und berechnete Were fix!</p>
+            <p v-if="selectedBill.locked">
+              Abrechnung eingefroren: Eingaben und berechnete Were fix!
+            </p>
           </form>
 
           <p v-else>Bitte zunächst Abrechnung auswählen.</p>
@@ -172,25 +189,29 @@ export default {
   },
   computed: {},
   methods: {
-
     getSum(contracts) {
       let sum = 0;
-      for(let c of contracts) {
+      for (let c of contracts) {
         sum += parseFloat(c.costTotal);
       }
-      return "Summe: " + (sum.toFixed(2)) + "€";
+      return "Summe: " + sum.toFixed(2) + "€";
     },
 
     getSumParty(contracts) {
       let sumParty = 0;
-      for(let c of contracts) {
+      for (let c of contracts) {
         sumParty += parseFloat(c.costTotal * c.partyShare);
       }
-      return this.partyByUuid(this.selectedBill.party).name + ": " + (sumParty.toFixed(2)) + "€";
+      return (
+        this.partyByUuid(this.selectedBill.party).name +
+        ": " +
+        sumParty.toFixed(2) +
+        "€"
+      );
     },
 
     partyByUuid(uuid) {
-      if(uuid == "alle") return {name: "Alle"};
+      if (uuid == "alle") return { name: "Alle" };
       return this.parties.find(party => party.uuid == uuid);
     },
 
@@ -307,12 +328,12 @@ export default {
           (activeTime / (365 * 24 * 60 * 60 * 1000)) * contract.costfix;
 
         let sumShares = 0;
-        for(let index in meter.shares) {
+        for (let index in meter.shares) {
           sumShares += meter.shares[index];
         }
         let partyShare = meter.shares[this.selectedBill.party] / sumShares;
-        if(!partyShare) partyShare = 0;
-        if(this.selectedBill.party == "alle") partyShare = 1;
+        if (!partyShare) partyShare = 0;
+        if (this.selectedBill.party == "alle") partyShare = 1;
 
         contracts.push({
           contract: contract,

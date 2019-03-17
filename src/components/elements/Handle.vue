@@ -1,25 +1,21 @@
 <template>
   <div class="handle">
-
-
     <div id="titleContainer">
       {{ title }}
     </div>
 
     <div id="controlContainer">
-
       <div class="nodrag">
         <div class="cntrl" id="close" v-on:click="close">🞩</div>
         <div class="cntrl" v-on:click="maximize">▢</div>
         <div class="cntrl" v-on:click="minimize">┈</div>
       </div>
-      
     </div>
   </div>
 </template>
 
 <script>
-const remote = require('electron').remote;
+const remote = require("electron").remote;
 
 export default {
   name: "Handle",
@@ -59,7 +55,7 @@ export default {
   display: grid;
   grid-template-columns: 1fr, 1fr, 1fr;
   grid-template-rows: auto;
-  grid-template-areas: "l m r"
+  grid-template-areas: "l m r";
 }
 
 #controlContainer {

@@ -96,33 +96,33 @@
         <tr>
           <td>Fixkosten<br />(€/Jahr)</td>
           <td>
-            <input class="textinput" type="text" v-model="input.costfix" />
+            <input class="textinput" type="number" v-model.number="input.costfix" />
           </td>
         </tr>
 
         <tr v-if="input.category == 3">
           <td>Kosten Abwasser<br />(€/{{ getMeasurementUnit() }})</td>
           <td>
-            <input class="textinput" type="text" v-model="input.costvardirty" />
+            <input class="textinput" type="number" v-model.number="input.costvardirty" />
           </td>
         </tr>
         <tr v-if="input.category == 3">
           <td>Kosten Niederschlag<br />(€/m²)</td>
           <td>
-            <input class="textinput" type="text" v-model="input.costvarrain" />
+            <input class="textinput" type="number" v-model.number="input.costvarrain" />
           </td>
         </tr>
         <tr v-if="input.category == 3">
           <td>Grundstücksgröße<br />(m²)</td>
           <td>
-            <input class="textinput" type="text" v-model="input.costvararea" />
+            <input class="textinput" type="number" v-model.number="input.costvararea" />
           </td>
         </tr>
 
         <tr v-else>
           <td>Variable Kosten<br />(€/{{ getMeasurementUnit() }})</td>
           <td>
-            <input class="textinput" type="text" v-model="input.costvar" />
+            <input class="textinput" type="number" v-model.number="input.costvar" />
           </td>
         </tr>
       </table>
@@ -220,7 +220,10 @@ export default {
     getMeters() {
       let returns = [];
       for (let meter of this.meters) {
-        if (meter.category == this.input.category || this.input.category == 3 && meter.category == 2) {
+        if (
+          meter.category == this.input.category ||
+          (this.input.category == 3 && meter.category == 2)
+        ) {
           returns.push(meter);
         }
       }

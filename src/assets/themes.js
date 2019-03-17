@@ -17,7 +17,7 @@ export default [
 
       { name: "ct0", value: "white" }, // Navbar selected text color, Button Bar selected text color
       { name: "ct1", value: "lightgray" }, // Default text / Button Bar default text
-      { name: "ct2", value: "lightgray" }, // Navbar default text color
+      { name: "ct2", value: "lightgray" } // Navbar default text color
     ]
   },
   {
@@ -34,7 +34,7 @@ export default [
       { name: "c2hover", value: "#a8bae2" },
       { name: "ct0", value: "white" },
       { name: "ct1", value: "lightgray" },
-      { name: "ct2", value: "lightgray" },
+      { name: "ct2", value: "lightgray" }
     ]
   },
   {
@@ -54,5 +54,5 @@ export default [
       { name: "ct1", value: "#28292b" },
       { name: "ct2", value: "lightgray" }
     ]
-  },
+  }
 ];

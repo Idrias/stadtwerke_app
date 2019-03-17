@@ -6,16 +6,18 @@
         <tr>
           <td>Name</td>
           <td>
-            <input class="textinput" type="text" v-model="input.name">
+            <input class="textinput" type="text" v-model="input.name" />
           </td>
         </tr>
       </table>
 
-      <br>
+      <br />
 
       <!-- Buttons -->
       <div id="buttonBar">
-        <button class="shadow" v-if="changeMode" v-on:click="closeAndDelete()">Löschen</button>
+        <button class="shadow" v-if="changeMode" v-on:click="closeAndDelete()">
+          Löschen
+        </button>
         <button class="shadow" v-on:click="close()">Abbrechen</button>
         <button class="shadow" v-on:click="closeAndUpdate()">Speichern</button>
       </div>

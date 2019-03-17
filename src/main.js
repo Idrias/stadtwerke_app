@@ -8,7 +8,7 @@ let vue = new Vue({
   render: h => h(App),
   router,
   data: {
-    sharedState: {},
+    sharedState: {}
   },
 
   methods: {
@@ -22,7 +22,8 @@ let vue = new Vue({
     },
 
     cycleTheme() {
-      this.sharedState.activeThemeIndex = (this.sharedState.activeThemeIndex + 1) % colorThemes.length;
+      this.sharedState.activeThemeIndex =
+        (this.sharedState.activeThemeIndex + 1) % colorThemes.length;
       let nextTheme = colorThemes[this.sharedState.activeThemeIndex];
       this.applyTheme(nextTheme);
     },
@@ -40,16 +41,8 @@ let vue = new Vue({
     ld(date, locale) {
       if (locale) return new Date(date).toLocaleDateString(locale);
       else return new Date(date).toLocaleDateString("de-de");
-    }
-  },
-
-  created: function() {
-    console.log("Root Vue instance created. Now reading data.");
-    let stateString = window.localStorage.getItem("applicationState");
-
-    if (stateString != "null") this.sharedState = JSON.parse(stateString);
-
-    if (stateString == "null" || this.sharedState == {})
+    },
+    resetShared() {
       this.sharedState = {
         categories: [
           { id: 0, name: "Strom", unit: "kWh", meterRelevant: true },
@@ -62,10 +55,21 @@ let vue = new Vue({
         readings: [],
         parties: [],
         bills: [],
-        activeThemeIndex: 0,
+        activeThemeIndex: 0
       };
+    }
+  },
 
-      this.applyTheme(colorThemes[this.sharedState.activeThemeIndex]);
+  created: function() {
+    console.log("Root Vue instance created. Now reading data.");
+    let stateString = window.localStorage.getItem("applicationState");
+
+    if (stateString != "null") this.sharedState = JSON.parse(stateString);
+
+    if (stateString == "null" || this.sharedState == {})
+      this.resetShared();
+
+    this.applyTheme(colorThemes[this.sharedState.activeThemeIndex]);
   },
 
   watch: {

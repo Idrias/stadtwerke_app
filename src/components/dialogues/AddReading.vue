@@ -4,9 +4,9 @@
       <!-- Zählerinformationen angeben -->
       <table>
         <tr>
-          <td>Zählerstand</td>
+          <td>Zählerstand ({{getUnit()}})</td>
           <td>
-            <input class="textinput" type="text" v-model="input.value" />
+            <input class="textinput" type="number" v-model.number="input.value" />
           </td>
         </tr>
 
@@ -108,6 +108,12 @@ export default {
       this.changeMode = true;
       Object.assign(this.input, currentVersion);
       this.show = true;
+    },
+
+    getUnit() {
+      let meter = this.meters.find(m => m.uuid == this.input.m_uuid);
+      console.log(meter);
+      if(meter) return this.categories.find(cat => cat.id == meter.category).unit;
     }
   }
 };
