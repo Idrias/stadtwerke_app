@@ -6,18 +6,16 @@
         <tr>
           <td>Name</td>
           <td>
-            <input class="textinput" type="text" v-model="input.name" />
+            <input class="textinput" type="text" v-model="input.name">
           </td>
         </tr>
       </table>
 
-      <br />
+      <br>
 
       <!-- Buttons -->
       <div id="buttonBar">
-        <button class="shadow" v-if="changeMode" v-on:click="closeAndDelete()">
-          Löschen
-        </button>
+        <button class="shadow" v-if="changeMode" v-on:click="closeAndDelete()">Löschen</button>
         <button class="shadow" v-on:click="close()">Abbrechen</button>
         <button class="shadow" v-on:click="closeAndUpdate()">Speichern</button>
       </div>
@@ -55,8 +53,17 @@ export default {
       this.close();
       for (let index in this.parties) {
         if (this.parties[index].uuid == this.input.uuid) {
+          let oldId = this.input.uuid;
           this.input.uuid = uuidv1();
           this.$set(this.parties, index, { ...this.input });
+
+          for (let meter of this.meters) {
+            if (meter.shares[oldId]) {
+              meter.shares[this.input.uuid] == meter.shares[oldId];
+              delete meter.shares[oldId];
+            }
+          }
+
           return;
         }
       }
@@ -68,6 +75,13 @@ export default {
       for (let index in this.parties) {
         if (this.parties[index].uuid == this.input.uuid) {
           this.parties.splice(index, 1);
+
+          for (let meter of this.meters) {
+            if (meter.shares[input.uuid]) {
+              delete meter.shares[input.uuid];
+            }
+          }
+
           break;
         }
       }

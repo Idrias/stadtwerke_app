@@ -46,7 +46,7 @@
                 <statistics-chart :selectedMeter="selectedMeter" :displayConsumption="true" :displayCost="false"></statistics-chart>
             </div>
             <br>
-            <div class="chartContainer">
+            <div class="chartContainer" v-if="false">
                 <statistics-chart :selectedMeter="selectedMeter" :displayConsumption="false" :displayCost="true"></statistics-chart>
             </div>
           </div>

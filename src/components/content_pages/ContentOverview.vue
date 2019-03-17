@@ -80,14 +80,10 @@ export default {
   data() {
     return {
       ...this.$root.$data.sharedState,
-      question: null,
+      question: this.getQuestion(),
     };
   },
   props: {},
-
-  mounted() {
-    this.question = this.getQuestion();
-  },
 
   methods: {
     getGreeting() {
@@ -173,7 +169,8 @@ export default {
           let sharedState = JSON.parse(contents);
 
           if(sharedState) {
-            that.$root.$data.sharedState = sharedState; 
+            that.$root.$data.sharedState = sharedState;
+            Object.assign(that.$data, that.$options.data.call(that));
           }
         }
       }
@@ -221,11 +218,12 @@ export default {
 
 button {
   width: 70%;
-  height: 40px;
+  min-height: 40px;
   margin: 10px;
   background: var(--c4);
   border: 1px solid var(--c2);
   color: var(--ct1);
+  padding: 1px;
 }
 
 button:hover {

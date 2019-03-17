@@ -220,7 +220,7 @@ export default {
     getMeters() {
       let returns = [];
       for (let meter of this.meters) {
-        if (meter.category == this.input.category) {
+        if (meter.category == this.input.category || this.input.category == 3 && meter.category == 2) {
           returns.push(meter);
         }
       }
