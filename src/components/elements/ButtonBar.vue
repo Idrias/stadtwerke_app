@@ -55,7 +55,7 @@ export default {
 
 .selected {
   background-color: var(--c4) !important;
-  color: white;
+  color: var(--ct0) !important;
 
   border-bottom: thin solid var(--c2);
 }

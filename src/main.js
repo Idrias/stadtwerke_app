@@ -9,29 +9,32 @@ let vue = new Vue({
   router,
   data: {
     sharedState: {},
-    colorThemes: colorThemes
   },
 
   methods: {
-    cycleTheme() {
-      for (let i in this.colorThemes) {
-        i = parseInt(i);
-
-        if (this.colorThemes[i].inUse === true) {
-          this.colorThemes[i].inUse = false;
-          let nextIndex = (i + 1) % this.colorThemes.length;
-          let nextTheme = this.colorThemes[nextIndex];
-
-          nextTheme.inUse = true;
-          for (let color of nextTheme.colors) {
-            document.documentElement.style.setProperty(
-              "--" + color.name,
-              color.value
-            );
-          }
-          return;
-        }
+    applyTheme(nextTheme) {
+      for (let color of nextTheme.colors) {
+        document.documentElement.style.setProperty(
+          "--" + color.name,
+          color.value
+        );
       }
+    },
+
+    cycleTheme() {
+      this.sharedState.activeThemeIndex = (this.sharedState.activeThemeIndex + 1) % colorThemes.length;
+      let nextTheme = colorThemes[this.sharedState.activeThemeIndex];
+      this.applyTheme(nextTheme);
+    },
+
+    getThemeName() {
+      return colorThemes[this.sharedState.activeThemeIndex].name;
+    },
+
+    getCssVar(name) {
+      return window
+        .getComputedStyle(document.documentElement)
+        .getPropertyValue(name);
     },
 
     ld(date, locale) {
@@ -58,8 +61,11 @@ let vue = new Vue({
         meters: [],
         readings: [],
         parties: [],
-        bills: []
+        bills: [],
+        activeThemeIndex: 0,
       };
+
+      this.applyTheme(colorThemes[this.sharedState.activeThemeIndex]);
   },
 
   watch: {

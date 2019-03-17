@@ -35,14 +35,14 @@
           <div v-if="selectedBill">
             <p>Zeitraum: {{ selectedBill.start }} - {{ selectedBill.end }}</p>
             <p>({{ getBillingDuration() }} Tage)</p>
-
+            <br>
             <table>
               <tr>
-                <td></td>
-                <td>Vertrag</td>
-                <td>Fixkosten</td>
-                <td>Variable Kosten</td>
-                <td>Gesamte Kosten</td>
+                <th></th>
+                <th>Vertrag</th>
+                <th>Fixkosten</th>
+                <th>Variable Kosten</th>
+                <th>Gesamte Kosten</th>
               </tr>
 
               <tr

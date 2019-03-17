@@ -5,7 +5,7 @@
         <div id="greetingContainer" class="gridContent shadow">
           <h2>
             {{ getGreeting() }} <br />
-            {{ getQuestion() }}
+            {{ question }}
           </h2>
         </div>
 
@@ -35,16 +35,34 @@
         </div>
 
         <div id="expectedExpenses" class="gridContent shadow">
-          <h3>Voraussichtliche Ausgaben</h3>
+          <h3>Letzte Erfassungen</h3>
+            
+            <table>
+              <tr>
+                <th>Zähler</th>
+                <th>Abgelesen</th>
+                <th>Stand</th>
+              </tr>
+              
+              <tr v-for="(reading, index) of getLastReadings()" v-bind:key="index">
+                <td>{{reading.meter}}</td>
+                <td>{{$root.ld(reading.date)}}</td>
+                <td>{{reading.value}}</td>
+              </tr>
+              
+            </table>
         </div>
 
         <div id="options" class="gridContent shadow">
           <h3>Optionen</h3>
-          <button class="shadow">Daten exportieren</button>
-          <button class="shadow">Daten importieren</button>
+          <button class="shadow" v-on:click="exportData()">Daten exportieren</button>
+          <button class="shadow" v-on:click="importData()">Daten importieren</button>
+
           <button class="shadow" v-on:click="$root.cycleTheme()">
-            Color Theme wechseln
+            Color Theme wechseln <br> Aktuell: {{$root.getThemeName()}}
           </button>
+          <br>
+          
         </div>
       </div>
     </template>
@@ -53,16 +71,24 @@
 
 <script>
 import ContentWrapper from "./ContentWrapper.vue";
+const remote = require("electron").remote;
+const fs = require("fs");
 
 export default {
   name: "ContentOverview",
   components: { ContentWrapper },
   data() {
     return {
-      ...this.$root.$data.sharedState
+      ...this.$root.$data.sharedState,
+      question: null,
     };
   },
   props: {},
+
+  mounted() {
+    this.question = this.getQuestion();
+  },
+
   methods: {
     getGreeting() {
       let hours = new Date().getHours();
@@ -99,6 +125,60 @@ export default {
                 .name
             })
         );
+    },
+
+    getLastReadings() {
+      let returns = [];
+      let lastcat = null;
+      
+      let meters = [...this.meters];
+      let readings = [...this.readings];
+      for(let meter of meters.sort( (a,b) => a.category > b.category)) {
+        let res = readings.sort( (a,b) => new Date(a.date) < new Date(b.date)).find(reading => reading.m_uuid == meter.uuid);
+        if(res) {
+          returns.push({...res, meter: meter.mid});
+        }
+      }
+
+      return returns;
+    },
+
+    exportData() {
+      let options = {
+        title: "Daten exportieren", 
+        defaultPath: "Abrechnungsapp.backup"
+      };
+
+      let that = this;
+      function then(path) {
+        console.log(path);
+        if(path)
+          fs.writeFileSync(path, JSON.stringify(that.$root.$data.sharedState));
+      }
+      remote.dialog.showSaveDialog(options, then);
+
+
+    },
+
+    importData() {
+      let options = {
+        title : "Daten importieren",
+        properties: ["openFile"],
+      }
+
+      let that = this;
+      function then(filePaths) {
+        if(filePaths && filePaths.length > 0) {
+          let contents = fs.readFileSync(filePaths[0]);
+          let sharedState = JSON.parse(contents);
+
+          if(sharedState) {
+            that.$root.$data.sharedState = sharedState; 
+          }
+        }
+      }
+      remote.dialog.showOpenDialog(options, then)
+
     }
   }
 };
@@ -159,5 +239,9 @@ button:focus {
 
 h3 {
   margin: 15px;
+}
+
+tr:hover {
+  cursor: default;
 }
 </style>

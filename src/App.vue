@@ -30,12 +30,8 @@ export default {
   --c0: #1e2124;
   --c1: #282b30;
   --c2: #7289da;
-  /*
-  --c2high: rgb(146, 208, 80);
-  --c2hover: rgb(168,210,151);
-  */
 
-  --c3: #36393e; /*#263244;*/
+  --c3: #36393e;
   --c4: #424549;
 
   --cm14: #2f3237;
@@ -46,6 +42,7 @@ export default {
 
   --ct0: #2c3e50;
   --ct1: lightgray;
+  --ct2: lightgray;
 }
 
 * {
@@ -53,6 +50,7 @@ export default {
   padding: 0;
   box-sizing: border-box;
   user-select: none;
+  transition: background-color 0.4s ease-in-out;
 }
 
 #content {

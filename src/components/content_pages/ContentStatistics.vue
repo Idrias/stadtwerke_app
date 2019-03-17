@@ -40,15 +40,17 @@
           <br />
 
           <p v-if="!selectedMeter">Bitte zunächst einen Zähler auswählen.</p>
+          
           <div v-else>
-            <line-chart
-              :curve="false"
-              :colors="['#00ffff', '#00ff00']"
-              :library="{ fontColor: '#ff0000' }"
-              :data="getReadingsData()"
-            ></line-chart>
-            <line-example></line-example>
+            <div class="chartContainer">
+                <statistics-chart :selectedMeter="selectedMeter" :displayConsumption="true" :displayCost="false"></statistics-chart>
+            </div>
+            <br>
+            <div class="chartContainer">
+                <statistics-chart :selectedMeter="selectedMeter" :displayConsumption="false" :displayCost="true"></statistics-chart>
+            </div>
           </div>
+
         </div>
       </div>
     </template>
@@ -61,7 +63,7 @@ import ContentWrapper from "./ContentWrapper.vue";
 import AddButton from "../elements/AddButton.vue";
 import AddMeter from "../dialogues/AddMeter.vue";
 import AddReading from "../dialogues/AddReading.vue";
-import LineExample from "../elements/LineChart.js";
+import StatisticsChart from "../elements/LineChart.js";
 
 export default {
   name: "ContentStatistics",
@@ -72,7 +74,7 @@ export default {
     AddButton,
     AddMeter,
     AddReading,
-    LineExample
+    StatisticsChart
   },
   data() {
     let el = {
@@ -82,19 +84,12 @@ export default {
     el.selectedCategory = el.categories[0];
     return el;
   },
-  methods: {
-    getReadingsData() {
-      let returns = {};
-      for (let reading of this.readings.filter(
-        r => r.m_uuid == this.selectedMeter.uuid
-      )) {
-        console.log(reading);
-        returns[reading.date] = reading.value;
-      }
-      console.log(returns);
-      return returns;
-    },
 
+  mounted() {
+    this.selectedMeter = this.meters.find(m => m.category == this.selectedCategory.id);
+  },
+
+  methods: {
     handleCategorySelected(category) {
       this.selectedMeter = null;
       this.selectedCategory = category;
@@ -137,8 +132,10 @@ export default {
 }
 
 #readings {
-  width: 100%;
   min-width: 100%;
+  max-width: 100%;
+  height: 100%;
+  overflow: auto;
   justify-self: center;
   background-color: var(--c4);
   padding: 30px;
@@ -173,6 +170,11 @@ td {
   grid-gap: 1%;
   grid-template-columns: minmax(332px, 35%) auto;
   /*grid-template-columns: 0.3fr auto;*/
+}
+
+.chartContainer {
+  position: relative;
+  max-width: 100%;
 }
 
 .selected {

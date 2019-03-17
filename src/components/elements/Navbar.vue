@@ -57,7 +57,7 @@ export default {
 
 .navbar-button {
   background-color: var(--c1);
-  color: var(--ct1);
+  color: var(--ct2);
   text-align: center;
   height: 3%;
   padding: 12%;
@@ -78,7 +78,7 @@ export default {
 
 .selected {
   background-color: var(--c4) !important;
-  color: white;
+  color: var(--ct0);
 
   border-style: none none none solid;
   border-width: medium;
