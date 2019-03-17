@@ -30,6 +30,7 @@
               <td>{{ $root.ld(contract.start) }}</td>
             </tr>
           </table>
+
           <p v-else>Keine aktiven Verträge gefunden.</p>
         </div>
 

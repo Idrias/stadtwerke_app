@@ -10,7 +10,6 @@
 
     <template #inner>
       <div class="gridContainer">
-        
         <div id="metersContainer" class="shadow">
           <h2>Zählerauswahl</h2>
           <br />
@@ -34,23 +33,24 @@
           </table>
 
           <p v-else>Noch keine Zähler hinzugefügt.</p>
-
         </div>
 
         <div id="readings" class="shadow">
           <h2>Daten</h2>
-          <br>
+          <br />
 
-          <p v-if="!selectedMeter"> Bitte zunächst einen Zähler auswählen. </p>
+          <p v-if="!selectedMeter">Bitte zunächst einen Zähler auswählen.</p>
           <div v-else>
-            
-            <line-chart :curve="false" :colors="['#00ffff', '#00ff00']" :library="{fontColor: '#ff0000'}" :data="getReadingsData()"></line-chart>
+            <line-chart
+              :curve="false"
+              :colors="['#00ffff', '#00ff00']"
+              :library="{ fontColor: '#ff0000' }"
+              :data="getReadingsData()"
+            ></line-chart>
             <line-example></line-example>
           </div>
-
         </div>
       </div>
-
     </template>
   </ContentWrapper>
 </template>
@@ -66,7 +66,14 @@ import LineExample from "../elements/LineChart.js";
 export default {
   name: "ContentStatistics",
   props: {},
-  components: { ButtonBar, ContentWrapper, AddButton, AddMeter, AddReading, LineExample },
+  components: {
+    ButtonBar,
+    ContentWrapper,
+    AddButton,
+    AddMeter,
+    AddReading,
+    LineExample
+  },
   data() {
     let el = {
       ...this.$root.$data.sharedState,
@@ -76,10 +83,11 @@ export default {
     return el;
   },
   methods: {
-
     getReadingsData() {
-      let returns = {}
-      for(let reading of this.readings.filter(r => r.m_uuid == this.selectedMeter.uuid)) {
+      let returns = {};
+      for (let reading of this.readings.filter(
+        r => r.m_uuid == this.selectedMeter.uuid
+      )) {
         console.log(reading);
         returns[reading.date] = reading.value;
       }
@@ -93,10 +101,7 @@ export default {
     },
 
     getMeters() {
-      return this.meters.filter(
-        m =>
-          m.category == this.selectedCategory.id
-      );
+      return this.meters.filter(m => m.category == this.selectedCategory.id);
     },
 
     getReadings() {
